@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: If you use OpenNest in your work, please cite it.
-title: "Adaptyv OpenNest: an open hardware SBS microplate nest for lab automation"
+title: "Adaptyv OpenNest: an open hardware SLAS microplate nest for lab automation"
 type: software
 authors:
   - name: Adaptyv
@@ -12,5 +12,4 @@ keywords:
   - open hardware
   - lab automation
   - microplate
-  - SBS
   - SLAS

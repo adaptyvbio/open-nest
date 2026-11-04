@@ -1,8 +1,8 @@
-<p align="center"><img src="docs/img/banner.png" alt="OpenNest: the open hardware nest for SBS plates"></p>
+<p align="center"><img src="docs/img/banner.png" alt="OpenNest: the open hardware nest for SLAS plates"></p>
 
 # Adaptyv OpenNest
 
-An open hardware deck plate that holds an SBS microplate where a robot can find it. The pocket, tabs
+An open hardware deck plate that holds a SLAS microplate where a robot can find it. The pocket, tabs
 and notches are fixed. The holes and the deck thickness are yours: tell an agent what you need and a
 script builds the files for 3D printing, aluminium CNC or other materials.
 

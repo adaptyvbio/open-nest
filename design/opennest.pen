@@ -2164,7 +2164,7 @@
           "x": 72,
           "y": 228,
           "name": "Headline block",
-          "width": 540,
+          "width": 580,
           "layout": "vertical",
           "gap": 22,
           "children": [
@@ -2175,7 +2175,7 @@
               "fill": "$on-ink",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "The open hardware nest for SBS plates.",
+              "content": "The open hardware nest for SLAS plates.",
               "lineHeight": 1.04,
               "fontFamily": "$font-sans",
               "fontSize": 62,
@@ -2188,7 +2188,7 @@
               "name": "Lede",
               "fill": "$on-ink-2",
               "textGrowth": "fixed-width",
-              "width": "fill_container",
+              "width": 540,
               "content": "Tell an agent your hole pattern and get the files for 3D printing, aluminium CNC or other materials.",
               "lineHeight": 1.4,
               "fontFamily": "$font-sans",
@@ -11228,7 +11228,7 @@
                   "fill": "$ink",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "A nest for every SBS plate.",
+                  "content": "A nest for every SLAS plate.",
                   "lineHeight": 1.04,
                   "fontFamily": "$font-sans",
                   "fontSize": 44,
@@ -12235,7 +12235,8 @@
                       "content": "Deck thicknesses other than 5 mm",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12247,7 +12248,8 @@
                       "content": "Not tested",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -17669,7 +17671,8 @@
                       "content": "Deck",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -17681,7 +17684,8 @@
                       "content": "Optional thickness in mm, 5 by default. A thicker deck takes larger screw heads.",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 }

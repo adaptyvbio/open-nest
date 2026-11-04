@@ -1,6 +1,6 @@
 # OpenNest for coding agents
 
-OpenNest is an open hardware deck plate that holds an SBS microplate. The pocket, tabs and notches
+OpenNest is an open hardware deck plate that holds a SLAS microplate. The pocket, tabs and notches
 are fixed. The user chooses the holes, the screws and the material. Your job is to turn their
 request into files with `cad/nest.py`.
 

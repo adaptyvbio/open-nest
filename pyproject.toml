@@ -1,7 +1,7 @@
 [project]
 name = "opennest"
 version = "1.4.0"
-description = "Open hardware SBS/SLAS microplate nest for lab automation"
+description = "Open hardware SLAS microplate nest for lab automation"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 license = { text = "CERN-OHL-P-2.0 AND MIT AND CC-BY-4.0" }
