@@ -101,7 +101,8 @@ an acceptance check.
 The pocket grows when the material would otherwise close on the largest SLAS plate at 15 C. The
 expansion figures behind that are typical handbook values, not measurements.
 
-Reference plates with no holes are in [`models/`](models/). Each folder has a `report.json`.
+Reference plates with no holes are in [`models/`](models/). Each folder has a `report.json`. The
+[releases](https://github.com/adaptyvbio/open-nest/releases) have them as zips for every version.
 
 ## What the script checks
 

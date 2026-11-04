@@ -83,6 +83,7 @@ been printed.
 ## Working on the repo
 
 `uv run pytest -m "not slow"` runs the fast checks, and `uv run pytest` builds real parts as well.
-`uv run cad/release.py` rebuilds the reference plates in `models/`. Fixed dimensions live only in
+`uv run cad/release.py` rebuilds the reference plates in `models/`. A new `VERSION` that reaches
+`main` publishes a GitHub release: see `CONTRIBUTING.md`. Fixed dimensions live only in
 `cad/opennest/spec.py`. The figures and guide come from `design/opennest.pen`; see `design/README.md`.
 Write plainly, with no em dashes.

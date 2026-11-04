@@ -22,7 +22,16 @@ uv run pytest
 ```
 
 If the geometry changed, bump `VERSION` in `spec.py`, since it is engraved on the part. Then run
-`uv run cad/release.py` to rebuild `models/`, and add a line to `CHANGELOG.md`.
+`uv run cad/release.py` to rebuild `models/`, and add a section to `CHANGELOG.md`. A new version
+starts untested, so restate the test status for it, in the same three places as above. The fast
+tests list anything else that still names the old version.
+
+## Releases
+
+When a new `VERSION` reaches `main` and CI passes, CI tags the commit and publishes a GitHub release
+by itself. The notes come from `CHANGELOG.md` and the test table in `README.md`. The assets are the
+plates in `models/`, the guide and the fixed dimensions. To preview them, run
+`uv run cad/package_release.py dist`.
 
 Do not add files taken from an instrument vendor's software, such as labware definitions or 3D
 models. Interface dimensions you measured yourself are fine.
