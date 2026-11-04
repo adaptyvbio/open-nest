@@ -1,0 +1,28 @@
+[project]
+name = "opennest"
+version = "1.4.0"
+description = "Open hardware SBS/SLAS microplate nest for lab automation"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "CERN-OHL-P-2.0 AND MIT AND CC-BY-4.0" }
+dependencies = [
+    "cadquery==2.5.2",
+    "svgpathtools==1.7.1",
+    "fonttools>=4.50",
+    "trimesh==4.5.3",
+    "numpy<2.3",
+    "pillow>=10",
+    "lxml>=5",
+    "reportlab>=4",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pypdf>=5"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["cad"]
+markers = ["slow: builds real CAD solids, about a minute each"]
