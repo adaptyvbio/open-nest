@@ -37,18 +37,21 @@ def command_for(req: Request) -> str:
         parts.append("--no-branding")
     if req.xy_scale != 1.0:
         parts.append(f"--xy-scale {req.xy_scale:g}")
+    if req.deck != s.DEFAULT_DECK:
+        parts.append(f"--deck {req.deck:g}")
     return " ".join(parts)
 
 
-def fixed_dimensions() -> dict:
-    """What every plate of this version shares, in mm. The pocket depends on the material."""
+def fixed_dimensions(deck: float = s.DEFAULT_DECK) -> dict:
+    """What every plate of this version shares, in mm. The pocket depends on the material, and the height on the deck."""
     return {
         "plate": {
             "length_x": s.L,
             "depth_y": s.W,
-            "height_z": s.TOP,
-            "seat_above_underside": s.SEAT,
-            "tab_above_seat": s.TOP - s.SEAT,
+            "height_z": deck + s.TAB_H,
+            "deck_thickness": deck,
+            "seat_above_underside": deck,
+            "tab_above_seat": s.TAB_H,
             "corner_radius": s.R_CORNER,
             "edge_radius": s.R_EDGE,
             "underside_break": s.BOTTOM_EDGE,
@@ -86,7 +89,7 @@ def version_reference() -> dict:
     """The reference file kept in the repo for this version."""
     pockets = {key: {"process": m.process, "pocket_x": s.pocket_for(m)[0], "pocket_y": s.pocket_for(m)[1], "tested": key in s.TESTED_MATERIALS} for key, m in s.MATERIALS.items()}
     return {
-        "design": {"opennest_version": s.VERSION, "origin": "plate centre, Z 0 at the underside", "units": "mm"},
+        "design": {"opennest_version": s.VERSION, "origin": "plate centre, Z 0 at the underside", "units": "mm", "deck_is_a_setting": f"Plate dimensions are for the default {s.DEFAULT_DECK:g} mm deck. --deck sets it from {s.MIN_DECK:g} to {s.MAX_DECK:g} mm."},
         "status": {"tested": s.ONLY_TEST},
         **fixed_dimensions(),
         "pocket_by_material": pockets,
@@ -95,7 +98,7 @@ def version_reference() -> dict:
 
 def design_record(plan: Plan) -> dict:
     req = plan.request
-    data = fixed_dimensions()
+    data = fixed_dimensions(plan.seat)
     data["tabs"]["corner_tab_y_from"] = sorted(set(plan.corner_y0.values()))
     data["tabs"]["lead_in_inward_corner_tabs"] = round(plan.chamfer_x, 3)
     data["engraving"].update({"title": plan.title if plan.engrave_title else "", "label": (plan.label or "") if plan.engrave_label else "", "mark": plan.engrave_logo})
@@ -111,7 +114,7 @@ def design_record(plan: Plan) -> dict:
     commit = _git_commit()
     if commit:
         design["commit"] = commit
-    request = {"name": req.name, "material": req.material, "branding": req.branding, "xy_scale": req.xy_scale, "blank": req.blank}
+    request = {"name": req.name, "material": req.material, "deck": req.deck, "branding": req.branding, "xy_scale": req.xy_scale, "blank": req.blank}
     if req.label is not None:
         request["label"] = req.label
     if req.holes:
@@ -128,12 +131,12 @@ def design_record(plan: Plan) -> dict:
         holes["through_d"] = plan.through_d
         if plan.cbore:
             holes["counterbore_d"], holes["counterbore_depth"] = plan.cbore
-            holes["floor_under_head"] = round(s.SEAT - plan.cbore[1], 3)
+            holes["floor_under_head"] = round(plan.seat - plan.cbore[1], 3)
         if plan.csk_d:
             holes["countersink_d"] = plan.csk_d
             holes["countersink_degrees"] = 90
-        if plan.material.process == "cnc-ptfe":
-            holes["sleeve"] = "stainless, 5 x 3.2 x 2.0 mm"
+        if plan.sleeve_text:
+            holes["sleeve"] = plan.sleeve_text
     catch_x, catch_y = s.capture_per_side(plan.pocket_x, plan.pocket_y)
     catch_x -= s.CHAMFER_IN - plan.chamfer_x
     return {
@@ -203,5 +206,6 @@ def read_request(path: Path) -> tuple[Request, str, str | None]:
         blank=r.get("blank", False),
         branding=r.get("branding", True),
         xy_scale=r.get("xy_scale", 1.0),
+        deck=r.get("deck", s.DEFAULT_DECK),
     )
     return request, design.get("opennest_version", "unknown"), design.get("commit")

@@ -31,6 +31,7 @@ class Request:
     label: str | None = None
     branding: bool = True
     xy_scale: float = 1.0
+    deck: float = s.DEFAULT_DECK
 
 
 @dataclass
@@ -52,9 +53,24 @@ class Plan:
     warnings: list[str] = field(default_factory=list)
 
     @property
+    def seat(self) -> float:
+        return self.request.deck
+
+    @property
+    def top(self) -> float:
+        return self.request.deck + s.TAB_H
+
+    @property
     def chamfer_x(self) -> float:
         """A wider pocket thins the corner tabs, so the lead-in gives way to keep room for the edge rounds."""
         return min(s.CHAMFER_IN, s.L / 2 - self.pocket_x / 2 - s.MIN_TAB_LAND)
+
+    @property
+    def sleeve_text(self) -> str | None:
+        """Solid PTFE only: the screw head bears on a metal sleeve, as long as the floor is thick."""
+        if not (self.material and self.material.process == "cnc-ptfe" and self.request.holes and self.cbore):
+            return None
+        return f"stainless, {self.through_d:g} x 3.2 x {self.seat - self.cbore[1]:g} mm"
 
     @property
     def title(self) -> str:
@@ -130,19 +146,26 @@ def _plan_screws(plan: Plan) -> None:
     plan.through_d = screw.clear
     if req.head == "cap":
         if screw.cap is None:
-            plan.errors.append(
-                f"An {req.screw} cap head does not fit: its counterbore would leave under {s.MIN_FLOOR} mm of the "
-                f"{s.SEAT} mm deck. Use --head flat, or M3 or smaller."
-            )
+            plan.errors.append(f"No cap head size is defined for {req.screw}. Use --head flat.")
             return
+        depth = screw.cap[1]
         plan.cbore = screw.cap
         plan.head_r = screw.cap[0] / 2
     else:
         if screw.flat is None:
             plan.errors.append(f"No flat head size is defined for {req.screw}. Use --head cap, or M3 and up.")
             return
+        depth = (screw.flat - screw.clear) / 2
         plan.csk_d = screw.flat
         plan.head_r = screw.flat / 2
+    floor = plan.seat - depth
+    if floor < s.MIN_FLOOR - 1e-9:
+        plan.errors.append(
+            f"An {req.screw} {req.head} head sinks {depth:g} mm into the {plan.seat:g} mm deck and leaves {floor:g} mm under it. "
+            f"The minimum is {s.MIN_FLOOR} mm. Use --deck {depth + s.MIN_FLOOR:g} or more"
+            + (", or --head flat." if req.head == "cap" else ".")
+        )
+        return
     if material and material.process == "cnc-ptfe":
         if req.head != "cap" or screw.sleeve_od is None:
             plan.errors.append("Solid PTFE creeps under a screw head, so it takes M3 cap heads on metal sleeves only.")
@@ -236,8 +259,13 @@ def make_plan(req: Request) -> Plan:
         return plan
     if not req.name or any(c in req.name for c in "/\\ ") or req.name.startswith("."):
         plan.errors.append(f"--name {req.name!r} must be a plain folder name, with no spaces or slashes.")
+    if not s.MIN_DECK <= req.deck <= s.MAX_DECK:
+        plan.errors.append(f"--deck {req.deck:g} is outside {s.MIN_DECK:g} to {s.MAX_DECK:g} mm.")
+        return plan
     plan.pocket_x, plan.pocket_y = s.pocket_for(plan.material)
     plan.warnings.append(s.test_status(plan.material))
+    if req.deck != s.DEFAULT_DECK:
+        plan.warnings.append(f"The deck is {req.deck:g} mm, not the default {s.DEFAULT_DECK:g} mm, so the seat is {abs(req.deck - s.DEFAULT_DECK):g} mm {'higher' if req.deck > s.DEFAULT_DECK else 'lower'} than the printed reference. Teach plate heights again. This deck thickness has not been made.")
     _plan_screws(plan)
     if plan.errors:
         return plan
@@ -270,6 +298,8 @@ def summary(plan: Plan) -> dict:
         "material": plan.material.title if plan.material else req.material,
         "test_status": s.test_status(plan.material) if plan.material else None,
         "process": plan.material.process if plan.material else None,
+        "deck_mm": req.deck,
+        "height_mm": plan.top,
         "pocket_mm": [plan.pocket_x, plan.pocket_y],
         "catch_per_side_mm": [round(v, 2) for v in s.capture_per_side(plan.pocket_x, plan.pocket_y)],
         "holes": [list(p) for p in req.holes],
@@ -278,7 +308,7 @@ def summary(plan: Plan) -> dict:
         "through_d_mm": plan.through_d,
         "counterbore_mm": plan.cbore,
         "countersink_d_mm": plan.csk_d,
-        "sleeve": bool(plan.material and plan.material.process == "cnc-ptfe" and req.holes),
+        "sleeve": plan.sleeve_text,
         "corner_tab_start_y_mm": sorted(set(plan.corner_y0.values())),
         "engraving": {"title": plan.title if plan.engrave_title else None, "label": plan.label if plan.engrave_label else None, "mark": plan.engrave_logo},
         "xy_scale": req.xy_scale,

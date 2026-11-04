@@ -34,41 +34,41 @@ def verify_step(plan: Plan, path) -> Checks:
     solid = solids[0]
     check("valid solid", solid.isValid())
     bb = solid.BoundingBox()
-    check("envelope", abs(bb.xlen - s.L) < 0.01 and abs(bb.ylen - s.W) < 0.01 and abs(bb.zlen - s.TOP) < 0.01, f"{bb.xlen:.3f} x {bb.ylen:.3f} x {bb.zlen:.3f}")
+    check("envelope", abs(bb.xlen - s.L) < 0.01 and abs(bb.ylen - s.W) < 0.01 and abs(bb.zlen - plan.top) < 0.01, f"{bb.xlen:.3f} x {bb.ylen:.3f} x {bb.zlen:.3f}")
 
     def inside(x, y, z):
         return solid.isInside(cq.Vector(x, y, z), 1e-4)
 
     wx, wy = plan.pocket_x / 2, plan.pocket_y / 2
     x_tab = sum(s.SIDE_TAB_X) / 2
-    z_wall = s.SEAT + 1.5
+    z_wall = plan.seat + 1.5
     for sx in (-1, 1):
         for sy in (-1, 1):
             y_tab = (plan.corner_y0[(sx, sy)] + wy) / 2
             tag = f"at sign X {sx}, Y {sy}"
             check("X wall", inside(sx * (wx + EPS), sy * y_tab, z_wall) and not inside(sx * (wx - EPS), sy * y_tab, z_wall), tag)
             check("Y wall", inside(sx * x_tab, sy * (wy + EPS), z_wall) and not inside(sx * x_tab, sy * (wy - EPS), z_wall), tag)
-            for z in (s.SEAT + 0.05, s.TOP - s.CHAMFER_UP - 0.6):  # straight from the seat to where the slope starts
+            for z in (plan.seat + 0.05, plan.top - s.CHAMFER_UP - 0.6):  # straight from the seat to where the slope starts
                 check("wall straight", inside(sx * (wx + EPS), sy * y_tab, z) and not inside(sx * (wx - EPS), sy * y_tab, z), f"{tag} Z {z:.2f}")
-            mid = s.TOP - s.CHAMFER_UP / 2
+            mid = plan.top - s.CHAMFER_UP / 2
             check("lead-in X", not inside(sx * (wx + plan.chamfer_x / 2 - EPS), sy * y_tab, mid) and inside(sx * (wx + plan.chamfer_x / 2 + EPS), sy * y_tab, mid), tag)
             check("lead-in Y", not inside(sx * x_tab, sy * (wy + s.CHAMFER_IN / 2 - EPS), mid) and inside(sx * x_tab, sy * (wy + s.CHAMFER_IN / 2 + EPS), mid), tag)
             x_top = (wx + plan.chamfer_x + s.L / 2) / 2  # middle of the land, where the two edge rounds meet or leave a flat
-            check("tab top", inside(sx * x_top, sy * y_tab, s.TOP - 0.05) and not inside(sx * x_top, sy * y_tab, s.TOP + EPS), tag)
+            check("tab top", inside(sx * x_top, sy * y_tab, plan.top - 0.05) and not inside(sx * x_top, sy * y_tab, plan.top + EPS), tag)
             # the seat is flat right up to the walls, so nothing lifts the edge of a plate
             for x, y in ((wx - 0.05, y_tab), (x_tab, wy - 0.05)):
-                check("seat at the wall", inside(sx * x, sy * y, s.SEAT - EPS) and not inside(sx * x, sy * y, s.SEAT + EPS), f"{tag} at {x:.2f}, {y:.2f}")
+                check("seat at the wall", inside(sx * x, sy * y, plan.seat - EPS) and not inside(sx * x, sy * y, plan.seat + EPS), f"{tag} at {x:.2f}, {y:.2f}")
 
     for sy in (-1, 1):
         notch_floor = s.W / 2 - s.NOTCH_D
-        check("notch", not inside(0, sy * (notch_floor + 0.1), s.SEAT / 2) and inside(0, sy * (notch_floor - 0.1), s.SEAT / 2))
+        check("notch", not inside(0, sy * (notch_floor + 0.1), plan.seat / 2) and inside(0, sy * (notch_floor - 0.1), plan.seat / 2))
 
     for x, y in plan.request.holes:
         tag = f"at {x:g}, {y:g}"
         r = plan.through_d / 2
         if plan.cbore:
             d, depth = plan.cbore
-            floor = s.SEAT - depth
+            floor = plan.seat - depth
             for a in (0, 90, 180, 270):
                 ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
                 check("through hole", not inside(x + ux * (r - EPS), y + uy * (r - EPS), floor / 2) and inside(x + ux * (r + EPS), y + uy * (r + EPS), floor / 2), tag)
@@ -84,12 +84,12 @@ def verify_step(plan: Plan, path) -> Checks:
                 # 90 deg: the wall steps in 1 mm per mm of depth
                 for depth in (0.05, (R - r) / 2):
                     rc = R - depth
-                    z = s.SEAT - depth
+                    z = plan.seat - depth
                     check("countersink 90 deg", not inside(x + ux * (rc - 0.05), y + uy * (rc - 0.05), z) and inside(x + ux * (rc + 0.05), y + uy * (rc + 0.05), z), f"{tag} depth {depth:.2f}")
         else:
             for a in (0, 90, 180, 270):
                 ux, uy = math.cos(math.radians(a)), math.sin(math.radians(a))
-                check("through hole", not inside(x + ux * (r - EPS), y + uy * (r - EPS), s.SEAT / 2) and inside(x + ux * (r + EPS), y + uy * (r + EPS), s.SEAT / 2), tag)
+                check("through hole", not inside(x + ux * (r - EPS), y + uy * (r - EPS), plan.seat / 2) and inside(x + ux * (r + EPS), y + uy * (r + EPS), plan.seat / 2), tag)
     return check
 
 

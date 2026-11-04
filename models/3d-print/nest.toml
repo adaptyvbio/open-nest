@@ -12,12 +12,13 @@ units = "mm"
 
 [status]
 this_material = "Tested: v1.4 has been printed on a Bambu H2D in PLA. It has not been run on a robot, and no measurements are recorded yet."
-tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D, with the default 5 mm deck."
 this_file = "Checked against its plan by software. This exact part has not been made."
 
 [request]
 name = "blank-3d-print"
 material = "pla"
+deck = 5.0
 branding = true
 xy_scale = 1.0
 blank = true
@@ -41,6 +42,7 @@ count = 0
 length_x = 134.0
 depth_y = 94.0
 height_z = 11.0
+deck_thickness = 5.0
 seat_above_underside = 5.0
 tab_above_seat = 6.0
 corner_radius = 3.0

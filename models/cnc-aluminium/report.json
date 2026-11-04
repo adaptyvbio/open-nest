@@ -4,11 +4,13 @@
  "ok": true,
  "errors": [],
  "warnings": [
-  "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+  "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D, with the default 5 mm deck."
  ],
  "material": "EN AW-6082-T651",
- "test_status": "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
+ "test_status": "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D, with the default 5 mm deck.",
  "process": "cnc-aluminium",
+ "deck_mm": 5.0,
+ "height_mm": 11.0,
  "pocket_mm": [
   128.3,
   86.0
@@ -23,7 +25,7 @@
  "through_d_mm": null,
  "counterbore_mm": null,
  "countersink_d_mm": null,
- "sleeve": false,
+ "sleeve": null,
  "corner_tab_start_y_mm": [
   24.0
  ],

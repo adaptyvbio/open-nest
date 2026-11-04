@@ -10,6 +10,8 @@
  "material": "PLA",
  "test_status": "Tested: v1.4 has been printed on a Bambu H2D in PLA. It has not been run on a robot, and no measurements are recorded yet.",
  "process": "3d-print",
+ "deck_mm": 5.0,
+ "height_mm": 11.0,
  "pocket_mm": [
   128.3,
   86.0
@@ -24,7 +26,7 @@
  "through_d_mm": null,
  "counterbore_mm": null,
  "countersink_d_mm": null,
- "sleeve": false,
+ "sleeve": null,
  "corner_tab_start_y_mm": [
   24.0
  ],

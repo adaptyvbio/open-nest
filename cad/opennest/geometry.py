@@ -222,12 +222,12 @@ def build(plan: Plan):
         return cq.Workplane("XY").add(cq.Solid.extrudeLinear(cq.Face.makeFromWires(outer), cq.Vector(0, 0, z1 - z0))).translate((0, 0, z0))
 
     def tab_x(sx, sy):
-        pts = [(wall_x, s.SEAT), (outer_x + 1, s.SEAT), (outer_x + 1, s.TOP), (wall_x + plan.chamfer_x, s.TOP), (wall_x, s.TOP - s.CHAMFER_UP)]
+        pts = [(wall_x, plan.seat), (outer_x + 1, plan.seat), (outer_x + 1, plan.top), (wall_x + plan.chamfer_x, plan.top), (wall_x, plan.top - s.CHAMFER_UP)]
         y0, y1 = sorted((sy * plan.corner_y0[(sx, sy)], sy * (outer_y + 1)))
         return cq.Workplane("XZ", origin=(0, y0, 0)).polyline([(sx * x, z) for x, z in pts]).close().extrude(-(y1 - y0))
 
     def tab_y(sx, sy):
-        pts = [(wall_y, s.SEAT), (outer_y + 1, s.SEAT), (outer_y + 1, s.TOP), (wall_y + s.CHAMFER_IN, s.TOP), (wall_y, s.TOP - s.CHAMFER_UP)]
+        pts = [(wall_y, plan.seat), (outer_y + 1, plan.seat), (outer_y + 1, plan.top), (wall_y + s.CHAMFER_IN, plan.top), (wall_y, plan.top - s.CHAMFER_UP)]
         x0, x1 = sorted((sx * s.SIDE_TAB_X[0], sx * s.SIDE_TAB_X[1]))
         return cq.Workplane("YZ", origin=(x0, 0, 0)).polyline([(sy * y, z) for y, z in pts]).close().extrude(x1 - x0)
 
@@ -236,12 +236,12 @@ def build(plan: Plan):
         for sy in (-1, 1):
             for tab in (tab_x(sx, sy), tab_y(sx, sy)):
                 tabs = tab if tabs is None else tabs.union(tab)
-    body = prism(0, s.SEAT).union(tabs.intersect(prism(0, s.TOP + 1)), clean=True)
+    body = prism(0, plan.seat).union(tabs.intersect(prism(0, plan.top + 1)), clean=True)
 
     tab_starts = set(plan.corner_y0.values())
 
     def is_tab_base(e):
-        if not _at_z(e, s.SEAT):
+        if not _at_z(e, plan.seat):
             return False
         c = e.Center()
         x, y = abs(c.x), abs(c.y)
@@ -254,7 +254,7 @@ def build(plan: Plan):
         )
 
     def is_seat_perimeter(e):
-        if not _at_z(e, s.SEAT):
+        if not _at_z(e, plan.seat):
             return False
         c = e.Center()
         x, y = abs(c.x), abs(c.y)
@@ -264,20 +264,20 @@ def build(plan: Plan):
         return (on_side or on_corner or in_notch) and not is_tab_base(e)
 
     body = fillet(body, is_tab_base, s.R_BASE, "tab base (construction)")
-    above = lambda e: e.Center().z > s.SEAT + s.R_BASE + 0.05  # noqa: E731
+    above = lambda e: e.Center().z > plan.seat + s.R_BASE + 0.05  # noqa: E731
     body = fillet(body, lambda e: above(e) or is_seat_perimeter(e), s.R_EDGE, "convex edges")
 
     # ---- screw holes, from the seat side
     if req.holes:
-        holes = cq.Workplane("XY").pushPoints(list(req.holes)).circle(plan.through_d / 2).extrude(s.TOP + 2).translate((0, 0, -1))
+        holes = cq.Workplane("XY").pushPoints(list(req.holes)).circle(plan.through_d / 2).extrude(plan.top + 2).translate((0, 0, -1))
         body = body.cut(holes)
     if plan.cbore:
         d, depth = plan.cbore
-        cbores = cq.Workplane("XY").pushPoints(list(req.holes)).circle(d / 2).extrude(depth + 1).translate((0, 0, s.SEAT - depth))
+        cbores = cq.Workplane("XY").pushPoints(list(req.holes)).circle(d / 2).extrude(depth + 1).translate((0, 0, plan.seat - depth))
         body = body.cut(cbores)
 
         def is_mouth(e):
-            if not (_at_z(e, s.SEAT) and e.geomType() == "CIRCLE" and abs(e.radius() - d / 2) < 0.01):
+            if not (_at_z(e, plan.seat) and e.geomType() == "CIRCLE" and abs(e.radius() - d / 2) < 0.01):
                 return False
             c = e.Center()
             return any(_near(c.x, x, 0.01) and _near(c.y, y, 0.01) for x, y in req.holes)
@@ -286,24 +286,24 @@ def build(plan: Plan):
     if plan.csk_d:
         r = plan.csk_d / 2
         for x, y in req.holes:  # 90 deg, so the cone loses 1 mm of radius per mm of depth
-            cone = cq.Solid.makeCone(r + 1, 0, r + 1, pnt=cq.Vector(x, y, s.SEAT + 1), dir=cq.Vector(0, 0, -1))
+            cone = cq.Solid.makeCone(r + 1, 0, r + 1, pnt=cq.Vector(x, y, plan.seat + 1), dir=cq.Vector(0, 0, -1))
             body = body.cut(cq.Workplane("XY").add(cone))
 
     body = fillet(body, lambda e: _at_z(e, 0) and e.geomType() != "CIRCLE", s.BOTTOM_EDGE, "underside perimeter")
 
     # ---- cut the construction fillet away: the tab section just above it, extruded down to the seat
-    z_wall = s.SEAT + s.R_BASE + 0.05
+    z_wall = plan.seat + s.R_BASE + 0.05
     walls = [
-        cq.Solid.extrudeLinear(f.translate(cq.Vector(0, 0, s.SEAT - z_wall)), cq.Vector(0, 0, z_wall - s.SEAT))
+        cq.Solid.extrudeLinear(f.translate(cq.Vector(0, 0, plan.seat - z_wall)), cq.Vector(0, 0, z_wall - plan.seat))
         for f in body.section(z_wall).faces().vals()
     ]
-    base_cut = cq.Workplane("XY", origin=(0, 0, s.SEAT)).rect(s.L + 2, s.W + 2).extrude(z_wall - s.SEAT)
+    base_cut = cq.Workplane("XY", origin=(0, 0, plan.seat)).rect(s.L + 2, s.W + 2).extrude(z_wall - plan.seat)
     for wall in walls:
         base_cut = base_cut.cut(cq.Workplane("XY").add(wall))
     body = body.cut(base_cut)
 
     # ---- engraving, recessed into the seat
-    floor_z = s.SEAT - s.ENGRAVE_DEPTH
+    floor_z = plan.seat - s.ENGRAVE_DEPTH
     tool_height = s.ENGRAVE_DEPTH + 1
 
     def engrave(wp, solids):

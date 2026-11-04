@@ -2,6 +2,7 @@
 """Write a Bambu Studio project for the H2D from the template settings and a new mesh."""
 import io
 import json
+import math
 import re
 import zipfile
 from datetime import date
@@ -62,6 +63,12 @@ def _thumbnail(mesh, view, up, size: int) -> bytes:
     return out.getvalue()
 
 
+def _lead_in_layers_from(plan: Plan) -> float:
+    """Where the fine layers start: the 0.12 mm layer boundary just under the foot of the lead-in."""
+    first, layer = 0.2, 0.12
+    return first + (math.floor((plan.seat + s.CHAMFER_UP - first) / layer + 1e-9) - 1) * layer
+
+
 def write_project(plan: Plan, stl_path: Path, out_path: Path) -> None:
     with zipfile.ZipFile(s.BAMBU_TEMPLATE) as z:
         names = z.namelist()
@@ -72,18 +79,23 @@ def write_project(plan: Plan, stl_path: Path, out_path: Path) -> None:
     mesh.remove_unreferenced_vertices()
     if not (mesh.is_watertight and mesh.is_winding_consistent):
         raise RuntimeError("the mesh is not watertight, so no Bambu project was written")
-    lift = s.TOP / 2
+    lift = plan.top / 2
     mesh.apply_translation((0, 0, -lift))  # the project keeps the mesh centred on Z and its build item lifts it onto the bed
-    blocked = _pocket_facing(mesh, plan, s.SEAT - lift)
+    blocked = _pocket_facing(mesh, plan, plan.seat - lift)
     template = parts[OBJECT_PART].decode()
     parts[OBJECT_PART] = _object_model(template[: template.index("<vertices>") + len("<vertices>")], mesh, blocked).encode()
     settings = parts["Metadata/model_settings.config"].decode().replace("NEST_NAME", "nest")
-    parts["Metadata/model_settings.config"] = re.sub(r'face_count="\d+"', f'face_count="{len(mesh.faces)}"', settings).encode()
+    settings = re.sub(r'face_count="\d+"', f'face_count="{len(mesh.faces)}"', settings)
+    settings = re.sub(r'(source_offset_z" value=")[^"]*', rf"\g<1>{lift:g}", settings)
+    settings = re.sub(r'(instance_id="0" transform="1 0 0 0 1 0 0 0 1 0 0 )[\d.]+', rf"\g<1>{lift:g}", settings)
+    parts["Metadata/model_settings.config"] = settings.encode()
+    parts["Metadata/layer_config_ranges.xml"] = re.sub(r'min_z="[^"]*" max_z="[^"]*"', f'min_z="{_lead_in_layers_from(plan):.2f}" max_z="{plan.top}"', parts["Metadata/layer_config_ranges.xml"].decode()).encode()
     plate = json.loads(parts["Metadata/plate_1.json"])
     plate["bbox_objects"][0]["name"] = "nest.stl"
     parts["Metadata/plate_1.json"] = json.dumps(plate).encode()
     root = parts["3D/3dmodel.model"].decode()
-    parts["3D/3dmodel.model"] = re.sub(r'(<metadata name="ModificationDate">)[^<]*', rf"\g<1>{date.today().isoformat()}", root).encode()
+    root = re.sub(r'(<metadata name="ModificationDate">)[^<]*', rf"\g<1>{date.today().isoformat()}", root)
+    parts["3D/3dmodel.model"] = re.sub(r'(<item [^>]*transform="1 0 0 0 1 0 0 0 1 [\d.]+ [\d.]+ )[\d.]+', rf"\g<1>{lift:g}", root).encode()
     iso = _thumbnail(mesh, (-0.45, 0.65, -0.6), (0, 0, 1), 512)
     parts["Metadata/plate_1.png"] = iso
     parts["Metadata/plate_no_light_1.png"] = iso

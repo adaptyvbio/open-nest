@@ -74,10 +74,50 @@ def test_heads_must_not_touch():
     assert not cap(((10, 30), (15, 30))).ok
 
 
-def test_m4_cap_head_does_not_fit_but_flat_does():
-    assert not plan(holes=parse_spacing("110x60"), screw="M4", head="cap").ok
-    p = plan(holes=parse_spacing("110x60"), screw="M4", head="flat")
-    assert p.ok and p.csk_d == 8.6
+def test_m4_cap_head_needs_a_thicker_deck():
+    thin = plan(holes=parse_spacing("110x60"), screw="M4", head="cap")
+    assert not thin.ok and any("--deck 5.5" in e for e in thin.errors)
+    assert plan(holes=parse_spacing("110x60"), screw="M4", head="cap", deck=5.5).ok
+    flat = plan(holes=parse_spacing("110x60"), screw="M4", head="flat")
+    assert flat.ok and flat.csk_d == 8.6
+
+
+def test_deck_sets_the_seat_and_height():
+    p = plan(blank=True, deck=8.0)
+    assert p.ok and p.seat == 8.0 and p.top == 14.0
+
+
+@pytest.mark.parametrize("deck", [1.0, 40.0])
+def test_deck_must_be_in_range(deck):
+    p = plan(blank=True, deck=deck)
+    assert not p.ok and any("--deck" in e for e in p.errors)
+
+
+def test_thin_deck_rejects_a_flat_head_that_would_break_through():
+    p = plan(holes=parse_spacing("110x60"), screw="M6", head="flat", deck=3.0)
+    assert not p.ok and any("--deck" in e for e in p.errors)
+
+
+def test_a_non_default_deck_warns_about_height_and_testing():
+    p = plan(blank=True, deck=8.0)
+    assert any("Teach plate heights again" in w and "has not been made" in w for w in p.warnings)
+    assert not any("Teach" in w for w in plan(blank=True).warnings)
+
+
+def test_deck_is_in_the_record(tmp_path):
+    req = Request(name="thick", material="6082", blank=True, deck=7.5)
+    path = tmp_path / "nest.toml"
+    write_record(make_plan(req), path)
+    back, _, _ = read_request(path)
+    assert back == req
+    record = design_record(make_plan(req))
+    assert record["plate"]["deck_thickness"] == 7.5 and record["plate"]["height_z"] == 13.5
+    assert "--deck 7.5" in command_for(req)
+
+
+def test_ptfe_sleeve_length_follows_the_deck():
+    p = plan(material="ptfe", holes=parse_spacing("110x60"), screw="M3", head="cap", deck=6.0)
+    assert p.ok and p.sleeve_text == "stainless, 5 x 3.2 x 3 mm"
 
 
 def test_plain_hole_needs_a_diameter():
@@ -145,7 +185,7 @@ def test_design_record_holds_the_dimensions(tmp_path):
     assert record["design"]["opennest_version"] == s.VERSION and record["design"]["label"] == "Slot A3"
     assert record["pocket"]["x"] == 128.3 and record["pocket"]["catch_per_side_x"] == 2.0
     assert record["holes"]["through_d"] == 3.4 and record["holes"]["counterbore_depth"] == 3.0
-    assert record["plate"]["seat_above_underside"] == s.SEAT
+    assert record["plate"]["seat_above_underside"] == s.DEFAULT_DECK
     assert '--label "Slot A3"' in command_for(p.request)
 
 

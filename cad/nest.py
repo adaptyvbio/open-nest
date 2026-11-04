@@ -65,6 +65,7 @@ def request_from(args) -> Request:
         label=args.label,
         branding=not args.no_branding,
         xy_scale=args.xy_scale,
+        deck=args.deck,
     )
 
 
@@ -153,6 +154,7 @@ def main() -> int:
         p.add_argument("--head", choices=["cap", "flat", "plain"])
         p.add_argument("--hole-d", type=float, help="through hole diameter, only with --head plain")
         p.add_argument("--blank", action="store_true", help="a plate with no holes")
+        p.add_argument("--deck", type=float, default=s.DEFAULT_DECK, help=f"deck thickness in mm, underside to seat, default {s.DEFAULT_DECK:g}")
         p.add_argument("--name", default="nest", help="output folder name under out/")
         p.add_argument("--label", help="free text engraved under the title and version, such as a slot name")
         p.add_argument("--no-branding", action="store_true", help="engrave OpenNest only, with no Adaptyv name or mark")

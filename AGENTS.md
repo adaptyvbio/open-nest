@@ -27,6 +27,7 @@ errors say why, 3 a built part failed its checks.
 | Screws | `--screw M3 --head cap` or `--head flat` | `--head plain --hole-d 4.2` makes a plain through hole, for example to tap |
 | Material | `--material` | Sets the process and sizes the pocket. List them with `uv run cad/nest.py materials` |
 | Name | `--name deck-a` | Output folder under `out/` |
+| Deck | `--deck 8` | Optional. Deck thickness in mm, underside to seat, 2 to 30, default 5. Tabs stay 6 mm above the seat |
 
 No holes at all: `--blank`.
 
@@ -60,10 +61,16 @@ print materials get a plain 3MF, so the user sets up their own slicer profile.
 If a printed pocket measures off (accept X 128.1 to 128.5, Y 85.8 to 86.2), rebuild with
 `--xy-scale target/measured`, for example `--xy-scale 1.0031`. Use one factor for both axes.
 
+## Deck thickness
+
+A thicker deck lets larger screw heads sink flush: `check` says the smallest deck a head needs. It
+also moves the seat, so tell the user to teach plate heights again. Only the default 5 mm deck has
+been printed.
+
 ## Rules
 
-- Do not edit `cad/opennest/spec.py` to make a pattern fit. Move the holes. If the user really wants
-  different fixed geometry, say that it leaves the reference design, and use `--no-branding`.
+- Do not edit `cad/opennest/spec.py` to make a pattern fit. Move the holes, or change `--deck`. If the
+  user really wants different fixed geometry, say that it leaves the reference design, and use `--no-branding`.
 - Be exact about testing. The only real test of v1.4 is a plate printed in PLA on a Bambu H2D. No
   plate has been machined, made in another material or run on a robot. `check` and `make` print
   this for the chosen material as their first warning, so always pass it on.

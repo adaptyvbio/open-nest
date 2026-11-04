@@ -1,8 +1,9 @@
 # SPDX-License-Identifier: CERN-OHL-P-2.0
 """Every fixed dimension of Adaptyv OpenNest, in millimetres.
 
-Frame: X = length, Y = depth, Z up. Origin at the centre of the underside, so the seat is at
-Z 5 and the tab tops are at Z 11. The pocket depends on the material, and the holes on the user.
+Frame: X = length, Y = depth, Z up. Origin at the centre of the underside, so the seat is at Z =
+deck thickness, and the tab tops are 6 mm above that. The pocket depends on the material, and the
+holes and the deck thickness on the user.
 """
 import math
 from dataclasses import dataclass
@@ -16,8 +17,9 @@ BAMBU_TEMPLATE = REPO / "cad/assets/bambu-h2d-template.3mf"
 
 # ---- envelope and heights
 L, W = 134.0, 94.0
-SEAT = 5.0  # underside to seat; the seat is the height a deck definition uses
-TOP = 11.0  # underside to tab top
+DEFAULT_DECK = 5.0  # deck thickness, underside to seat; each plate can set its own
+MIN_DECK, MAX_DECK = 2.0, 30.0
+TAB_H = 6.0  # seat to tab top, the same on every plate
 R_CORNER = 3.0  # plan-view radius on the four plate corners
 R_EDGE = 0.5  # every exposed convex edge; Type II anodise needs no more, thick hardcoat does
 BOTTOM_EDGE = 0.5  # underside perimeter break
@@ -59,7 +61,7 @@ R_CBORE = 0.3  # edge break on a counterbore mouth
 @dataclass(frozen=True)
 class Screw:
     clear: float  # through hole, ISO 273 medium
-    cap: tuple[float, float] | None = None  # counterbore diameter and depth, ISO 4762 head flush
+    cap: tuple[float, float] | None = None  # counterbore diameter and depth, ISO 4762 head flush; the deck must leave MIN_FLOOR under it
     flat: float | None = None  # 90 deg countersink diameter, ISO 10642 head flush
     sleeve_od: float | None = None  # metal sleeve at the screw, for materials that creep
 
@@ -68,9 +70,9 @@ SCREWS = {
     "M2": Screw(2.4, cap=(4.4, 2.1)),
     "M2.5": Screw(2.9, cap=(5.0, 2.6)),
     "M3": Screw(3.4, cap=(6.0, 3.0), flat=6.5, sleeve_od=5.0),
-    "M4": Screw(4.5, flat=8.6),  # an M4 cap head needs 4 mm of depth, which leaves 1 mm of floor
-    "M5": Screw(5.5, flat=10.8),
-    "M6": Screw(6.6, flat=12.9),
+    "M4": Screw(4.5, cap=(8.0, 4.0), flat=8.6),
+    "M5": Screw(5.5, cap=(9.5, 5.0), flat=10.8),
+    "M6": Screw(6.6, cap=(11.0, 6.0), flat=12.9),
 }
 
 
@@ -100,7 +102,7 @@ MATERIALS = {
 
 # ---- what has really been tested on this version. Update it only when a real part says so.
 TESTED_MATERIALS = {"pla": "printed on a Bambu H2D"}
-ONLY_TEST = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+ONLY_TEST = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D, with the default 5 mm deck."
 
 
 def test_status(material: Material) -> str:

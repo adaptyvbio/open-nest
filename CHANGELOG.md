@@ -11,13 +11,16 @@ The version is engraved on every plate, so a plate always says which design it i
 - Every build writes `nest.toml`, a design record with the version, commit, inputs and every
   dimension, and `--config` builds the same part from it. `docs/versions/` keeps each version's
   fixed dimensions.
+- `--deck` sets the deck thickness, from 2 to 30 mm with 5 mm as the default. A thick enough deck
+  takes M4 to M6 cap heads.
 - `--label` engraves free text under the title and version, such as a slot name.
 - The flat head countersink is a true 90 degrees, 6.5 mm at the seat for M3. Earlier versions cut
   about 5.1 mm at the seat, so a flat head could sit above it.
 - The pocket is sized by material, and Solid PTFE gets its own pocket and metal sleeves.
 - One parametric builder replaces a script per plate. The engraved mark is now true curves, which
   cuts the STEP file from about 6.8 MB to about 4 MB and gives a CNC cleaner toolpaths.
-- The frame moves to the underside of the plate: seat at Z 5, tab tops at Z 11.
+- The frame moves to the underside of the plate: the seat is at Z = deck thickness, and the tab tops
+  are 6 mm above it.
 
 ## v1.3
 

@@ -49,4 +49,23 @@ def test_xy_scale_scales_the_mesh_and_not_the_step(tmp_path):
 def test_ptfe_builds_with_its_wider_pocket(tmp_path):
     report = build(tmp_path, material="ptfe", holes=parse_spacing("110x60"), screw="M3", head="cap")
     assert report["pocket_mm"] == [129.0, 86.5]
-    assert report["sleeve"] is True
+    assert report["sleeve"] == "stainless, 5 x 3.2 x 2 mm"
+
+
+def test_thick_deck_takes_an_m4_cap_head(tmp_path):
+    report = build(tmp_path, material="6082", holes=parse_spacing("110x60"), screw="M4", head="cap", deck=8.0)
+    assert report["height_mm"] == 14.0
+
+
+def test_thick_deck_prints_with_the_fine_layers_on_the_lead_in(tmp_path):
+    import zipfile
+
+    build(tmp_path, material="pla", blank=True, deck=8.0)
+    with zipfile.ZipFile(tmp_path / "nest.3mf") as z:
+        assert 'min_z="10.88" max_z="14.0"' in z.read("Metadata/layer_config_ranges.xml").decode()
+        assert "175 160 7" in z.read("3D/3dmodel.model").decode()
+
+
+def test_thinnest_deck_builds(tmp_path):
+    report = build(tmp_path, material="6082", blank=True, deck=2.0)
+    assert report["height_mm"] == 8.0

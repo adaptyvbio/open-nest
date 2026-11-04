@@ -158,17 +158,17 @@ def _section(sh: Sheet, plan: Plan, ox: float, oy: float, k: float) -> None:
     def m(x, z):
         return ox + (x - x0) * k * mm, oy + z * k * mm
 
-    pts = [(x0, 0), (s.L / 2 - 0.5, 0), (s.L / 2, 0.5), (s.L / 2, s.TOP - 0.5), (s.L / 2 - 0.5, s.TOP), (wall + s.CHAMFER_IN, s.TOP), (wall, s.TOP - s.CHAMFER_UP), (wall, s.SEAT), (x0, s.SEAT)]
+    pts = [(x0, 0), (s.L / 2 - 0.5, 0), (s.L / 2, 0.5), (s.L / 2, plan.top - 0.5), (s.L / 2 - 0.5, plan.top), (wall + s.CHAMFER_IN, plan.top), (wall, plan.top - s.CHAMFER_UP), (wall, plan.seat), (x0, plan.seat)]
     sh.poly([m(*p) for p in pts], width=0.9, fill=HexColor("#FFFFFF"))
-    tab = [(wall, s.SEAT), (s.L / 2, s.SEAT), (s.L / 2, s.TOP - 0.5), (s.L / 2 - 0.5, s.TOP), (wall + s.CHAMFER_IN, s.TOP), (wall, s.TOP - s.CHAMFER_UP)]
+    tab = [(wall, plan.seat), (s.L / 2, plan.seat), (s.L / 2, plan.top - 0.5), (s.L / 2 - 0.5, plan.top), (wall + s.CHAMFER_IN, plan.top), (wall, plan.top - s.CHAMFER_UP)]
     sh.poly([m(*p) for p in tab], width=0.9, fill=TAB)
     right = m(s.L / 2, 0)[0]
-    sh.vdim(m(0, s.SEAT)[1], m(0, s.TOP - s.CHAMFER_UP)[1], right + 14, right, right, f"{s.CHAMFER_UP:g}")
-    sh.vdim(m(0, s.TOP - s.CHAMFER_UP)[1], m(0, s.TOP)[1], right + 14, right, right, f"{s.CHAMFER_UP:g}")
-    sh.vdim(m(0, 0)[1], m(0, s.SEAT)[1], right + 14, right, right, f"{s.SEAT:.2f} {s.TOL_SEAT}", key=True)
-    sh.hdim(m(wall, 0)[0], m(wall + plan.chamfer_x, 0)[0], m(0, s.TOP)[1] + 9, m(0, s.TOP - s.CHAMFER_UP)[1], m(0, s.TOP)[1], f"{plan.chamfer_x:.2f}")
-    sh.hdim(m(wall, 0)[0], right, m(0, s.TOP)[1] + 22, m(0, s.TOP - s.CHAMFER_UP)[1], m(0, s.TOP)[1], f"{s.L / 2 - wall:.2f}")
-    sh.text(m(wall, 0)[0] - 5, m(0, s.TOP - s.CHAMFER_UP / 2)[1], "LEAD-IN", "MonoM", 6.5, INK, "right")
+    sh.vdim(m(0, plan.seat)[1], m(0, plan.top - s.CHAMFER_UP)[1], right + 14, right, right, f"{s.CHAMFER_UP:g}")
+    sh.vdim(m(0, plan.top - s.CHAMFER_UP)[1], m(0, plan.top)[1], right + 14, right, right, f"{s.CHAMFER_UP:g}")
+    sh.vdim(m(0, 0)[1], m(0, plan.seat)[1], right + 14, right, right, f"{plan.seat:.2f} {s.TOL_SEAT}", key=True)
+    sh.hdim(m(wall, 0)[0], m(wall + plan.chamfer_x, 0)[0], m(0, plan.top)[1] + 9, m(0, plan.top - s.CHAMFER_UP)[1], m(0, plan.top)[1], f"{plan.chamfer_x:.2f}")
+    sh.hdim(m(wall, 0)[0], right, m(0, plan.top)[1] + 22, m(0, plan.top - s.CHAMFER_UP)[1], m(0, plan.top)[1], f"{s.L / 2 - wall:.2f}")
+    sh.text(m(wall, 0)[0] - 5, m(0, plan.top - s.CHAMFER_UP / 2)[1], "LEAD-IN", "MonoM", 6.5, INK, "right")
     sh.text(m(x0, 0)[0], m(0, 0)[1] - 11, f"SECTION AT A CORNER TAB, {k:g}:1", "Mono", 6.2, SOFT)
 
 
@@ -200,14 +200,14 @@ def write_drawing(plan: Plan, path: Path) -> None:
     _plan_view(sh, plan, 275, 298)
 
     col = 556
-    _section(sh, plan, col + 4, sh.h - 186, 4.2)
+    _section(sh, plan, col + 4, sh.h - 186, round(min(4.2, 46 / plan.top), 1))
 
     y = sh.h - 216
     sh.text(col, y, "TOLERANCES", "MonoM", 7, ACCENT)
     y = _table(sh, col, y - 13, (("FEATURE", 130), ("VALUE", 120)), [
         ("Pocket X", f"{plan.pocket_x:.2f} {s.TOL_POCKET}"),
         ("Pocket Y", f"{plan.pocket_y:.2f} {s.TOL_POCKET}"),
-        ("Seat height", f"{s.SEAT:.2f} {s.TOL_SEAT}"),
+        ("Seat height", f"{plan.seat:.2f} {s.TOL_SEAT}"),
         ("Seat flatness", f"{s.TOL_FLATNESS}"),
         ("Everything else", s.TOL_GENERAL),
     ])
@@ -220,7 +220,7 @@ def write_drawing(plan: Plan, path: Path) -> None:
     notes = [finish, f"{coated}Tab walls meet the seat in a", "sharp corner: use a square end mill. External edges R0.5.", f"Plate corners R{s.R_CORNER:g}. Notch R{s.R_NOTCH:g} inside, R{s.R_MOUTH:g} at the mouth.", f"Engraving {s.ENGRAVE_DEPTH} mm deep. The STEP file is the master."]
     notes.append("Status: this version has not been machined yet. Calculated, not proven.")
     if material.process == "cnc-ptfe" and req.holes:
-        notes.append("Fit a stainless sleeve, 5 x 3.2 x 2.0 mm, in each hole.")
+        notes.append(f"Fit a sleeve in each hole: {plan.sleeve_text}.")
     y -= 15
     for line in filter(None, notes):
         sh.text(col, y, line, "Geist", 7.2, INK)

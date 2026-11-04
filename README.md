@@ -3,8 +3,8 @@
 # Adaptyv OpenNest
 
 An open hardware deck plate that holds an SBS microplate where a robot can find it. The pocket, tabs
-and notches are fixed. The holes are yours: tell an agent your pattern and a script builds the files
-for 3D printing, aluminium CNC or other materials.
+and notches are fixed. The holes and the deck thickness are yours: tell an agent what you need and a
+script builds the files for 3D printing, aluminium CNC or other materials.
 
 **[Design and manufacturing guide (PDF)](docs/OpenNest-Guide.pdf)**
 
@@ -12,7 +12,7 @@ for 3D printing, aluminium CNC or other materials.
 
 | v1.4 | Status |
 | --- | --- |
-| 3D print in PLA on a Bambu H2D | **Printed.** No measurements recorded yet |
+| 3D print in PLA on a Bambu H2D, default 5 mm deck | **Printed.** No measurements recorded yet |
 | 3D print in other materials | Not tested |
 | CNC aluminium | Not tested |
 | CNC POM-C or PEEK | Not tested |
@@ -35,7 +35,8 @@ uv run cad/nest.py check --material 6082 --screw M3 --head cap --spacing 110x60
 uv run cad/nest.py make  --material 6082 --screw M3 --head cap --spacing 110x60 --name deck-a --label "Slot A3"
 ```
 
-`check` needs no CAD and explains anything that will not work. `make` takes about 20 s and writes to
+`check` needs no CAD and explains anything that will not work, including the deck thickness a screw
+head needs. `make` takes about 20 s and writes to
 `out/deck-a/`. `--label` is free text engraved under the title and version: a slot name, or anything
 you want to read on the part.
 
@@ -68,9 +69,10 @@ If only the plate survives, read the version engraved on it and open
 
 | | |
 | --- | --- |
-| Envelope | 134 x 94 x 11 mm |
+| Plan | 134 x 94 mm |
+| Height | Deck thickness + 6 mm |
+| Deck thickness | `--deck`, 2 to 30 mm, default 5 mm |
 | Pocket | 128.3 x 86.0 mm, +0.10/0 |
-| Seat | 5.0 mm above the underside |
 | Lead-in | 30 degrees from vertical, starting 3 mm above the seat |
 | Catch | About 2.0 mm per side for a nominal plate |
 | Gripper notches | 40 x 8.5 mm, on both long sides |
@@ -101,9 +103,7 @@ expansion figures behind that are typical handbook values, not measurements.
 
 Reference plates with no holes are in [`models/`](models/). Each folder has a `report.json`.
 
-## Status
-
-**Work in progress, and internal for now.** The test status is at [the top of this page](#what-has-been-tested).
+## What the script checks
 
 `cad/nest.py` checks that a file matches its plan: it probes the finished STEP for the pocket walls,
 the seat, the lead-ins, the notches and every hole. These are software checks, not part tests. They

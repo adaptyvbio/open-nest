@@ -4,14 +4,16 @@
 opennest_version = "1.4"
 origin = "plate centre, Z 0 at the underside"
 units = "mm"
+deck_is_a_setting = "Plate dimensions are for the default 5 mm deck. --deck sets it from 2 to 30 mm."
 
 [status]
-tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D, with the default 5 mm deck."
 
 [plate]
 length_x = 134.0
 depth_y = 94.0
 height_z = 11.0
+deck_thickness = 5.0
 seat_above_underside = 5.0
 tab_above_seat = 6.0
 corner_radius = 3.0

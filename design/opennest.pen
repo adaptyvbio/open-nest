@@ -3563,7 +3563,7 @@
               "fill": "$on-ink",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "5.0 mm above the underside. Tab walls meet it square, so a plate sits flat.",
+              "content": "5.0 mm above the underside by default. Tab walls meet it square, so a plate sits flat.",
               "lineHeight": 1.32,
               "fontFamily": "$font-sans",
               "fontSize": 17,
@@ -3599,7 +3599,7 @@
               "fill": "$on-ink",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "Holes are yours. Tell an agent the pattern and a script builds the file.",
+              "content": "Holes and deck thickness are yours. Tell an agent and a script builds the file.",
               "lineHeight": 1.32,
               "fontFamily": "$font-sans",
               "fontSize": 17,
@@ -4235,7 +4235,7 @@
                   "fill": "$on-ink-2",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Flatness 0.05. Height 5.0 ±0.05 from the underside.",
+                  "content": "Flatness 0.05. Height is the deck thickness, 5.0 by default, ±0.05.",
                   "lineHeight": 1.38,
                   "fontFamily": "$font-sans",
                   "fontSize": 14,
@@ -4721,7 +4721,7 @@
               "y": 569.2,
               "name": "Deck label",
               "fill": "#14293399",
-              "content": "DECK",
+              "content": "DECK, 5.0 BY DEFAULT",
               "fontFamily": "$font-mono",
               "fontSize": 12,
               "fontWeight": "normal",
@@ -5060,7 +5060,7 @@
               "fill": "$on-ink-2",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "Pocket, tabs and notches stay fixed. An LLM agent runs the script with the hole pattern you want.",
+              "content": "Pocket, tabs and notches stay fixed. An LLM agent runs the script with the holes and deck thickness you want.",
               "lineHeight": 1.42,
               "fontFamily": "$font-sans",
               "fontSize": 20,
@@ -6843,6 +6843,7 @@
                   "content": "TESTED",
                   "fontFamily": "$font-mono",
                   "fontSize": 11,
+                  "fontWeight": "normal",
                   "letterSpacing": 1.1
                 },
                 {
@@ -8091,6 +8092,7 @@
                   "content": "TESTED",
                   "fontFamily": "$font-mono",
                   "fontSize": 11,
+                  "fontWeight": "normal",
                   "letterSpacing": 1.1
                 },
                 {
@@ -9339,6 +9341,7 @@
                   "content": "TESTED",
                   "fontFamily": "$font-mono",
                   "fontSize": 11,
+                  "fontWeight": "normal",
                   "letterSpacing": 1.1
                 },
                 {
@@ -11241,7 +11244,7 @@
               "fill": "$ink-2",
               "textGrowth": "fixed-width",
               "width": "fill_container",
-              "content": "OpenNest is an open hardware deck plate that holds a standard microplate where a robot can find it. Tell an agent your hole pattern, then print or machine the file it builds.",
+              "content": "OpenNest is an open hardware deck plate that holds a microplate where a robot can find it. Tell an agent your holes and deck, then print or machine the file.",
               "lineHeight": 1.42,
               "fontFamily": "$font-sans",
               "fontSize": 17,
@@ -11287,7 +11290,7 @@
                       "fill": "$on-ink-2",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "mm plate, 11 mm tall",
+                      "content": "mm plate, 5 mm deck",
                       "lineHeight": 1.3,
                       "fontFamily": "$font-sans",
                       "fontSize": 11.5,
@@ -11928,6 +11931,7 @@
                       "content": "V1.4",
                       "fontFamily": "$font-mono",
                       "fontSize": 9.5,
+                      "fontWeight": "normal",
                       "letterSpacing": 0.9500000000000001
                     },
                     {
@@ -11940,6 +11944,7 @@
                       "content": "STATUS",
                       "fontFamily": "$font-mono",
                       "fontSize": 9.5,
+                      "fontWeight": "normal",
                       "letterSpacing": 0.9500000000000001
                     }
                   ]
@@ -11967,10 +11972,11 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "3D print in PLA on a Bambu H2D",
+                      "content": "3D print in PLA on a Bambu H2D, 5 mm deck",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12013,7 +12019,8 @@
                       "content": "3D print in other materials",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12025,7 +12032,8 @@
                       "content": "Not tested",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12055,7 +12063,8 @@
                       "content": "CNC aluminium",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12067,7 +12076,8 @@
                       "content": "Not tested",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12097,7 +12107,8 @@
                       "content": "CNC POM-C or PEEK",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12109,7 +12120,8 @@
                       "content": "Not tested",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12139,7 +12151,8 @@
                       "content": "CNC solid PTFE",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -12151,7 +12164,8 @@
                       "content": "Not tested",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12160,6 +12174,10 @@
                   "id": "HLmmJ",
                   "name": "Row",
                   "width": "fill_container",
+                  "stroke": "$hairline",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
                   "gap": 12,
                   "padding": [
                     6,
@@ -12177,11 +12195,51 @@
                       "content": "On a robot",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
                       "id": "ab0oV",
+                      "name": "Status",
+                      "fill": "$ink-2",
+                      "textGrowth": "fixed-width",
+                      "width": 280,
+                      "content": "Not tested",
+                      "lineHeight": 1.38,
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UCWhb",
+                  "name": "Row",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "padding": [
+                    6,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VJxMZ",
+                      "name": "What",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Deck thicknesses other than 5 mm",
+                      "lineHeight": 1.38,
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "dulHo",
                       "name": "Status",
                       "fill": "$ink-2",
                       "textGrowth": "fixed-width",
@@ -12232,6 +12290,7 @@
                       "content": "THAT IS THE WHOLE LIST",
                       "fontFamily": "$font-mono",
                       "fontSize": 9.5,
+                      "fontWeight": "normal",
                       "letterSpacing": 0.9500000000000001
                     }
                   ]
@@ -12246,7 +12305,8 @@
                   "content": "Every other number here is calculated from the model and the SLAS standard. Software checks read the file, not a real part.",
                   "lineHeight": 1.46,
                   "fontFamily": "$font-sans",
-                  "fontSize": 12.5
+                  "fontSize": 12.5,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -13628,7 +13688,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Holes are yours to define. Screw heads sit below the seat, clear of the plate.",
+                      "content": "Holes are yours to define, and so is the deck thickness, 5 mm by default. Screw heads sit below the seat, clear of the plate.",
                       "lineHeight": 1.52,
                       "fontFamily": "$font-sans",
                       "fontSize": 13,
@@ -14375,7 +14435,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": 110,
-                      "content": "5.00",
+                      "content": "5.00 or your deck",
                       "lineHeight": 1.35,
                       "fontFamily": "$font-mono",
                       "fontSize": 12,
@@ -14555,7 +14615,7 @@
                   "fill": "$ink",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Hole positions are yours to define, so they are not on this drawing. The STEP file is the master.",
+                  "content": "Hole positions are yours to define, so they are not on this drawing. Deck thickness is 5.0 mm by default and yours to change. The script draws your exact plate, and its STEP file is the master.",
                   "lineHeight": 1.46,
                   "fontFamily": "$font-sans",
                   "fontSize": 12.5,
@@ -15310,7 +15370,7 @@
                       "y": 336.6,
                       "name": "Deck label",
                       "fill": "#14293399",
-                      "content": "DECK",
+                      "content": "DECK, 5.0 BY DEFAULT",
                       "fontFamily": "$font-mono",
                       "fontSize": 9,
                       "fontWeight": "normal",
@@ -15485,6 +15545,7 @@
                       "content": "LIMITS",
                       "fontFamily": "$font-mono",
                       "fontSize": 9.5,
+                      "fontWeight": "normal",
                       "letterSpacing": 0.9500000000000001
                     }
                   ]
@@ -15499,7 +15560,8 @@
                   "content": "Plastic plates grow faster than aluminium. By calculation, at 37 °C a plate at the ±0.5 mm limit is 0.06 mm too big in X and 0.05 mm in Y, and one within ±0.25 mm still clears by about 0.2 mm. Float of ±0.27 mm is comfortable for 96 and 384 wells. Check your tolerances before you run 1536-well plates.",
                   "lineHeight": 1.46,
                   "fontFamily": "$font-sans",
-                  "fontSize": 12.5
+                  "fontSize": 12.5,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -16203,7 +16265,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Measure the seat height from the underside. The target is 5.0 mm. Check the seat is flat.",
+                      "content": "Measure the seat height from the underside. The target is your deck thickness, 5.0 mm by default. Check the seat is flat.",
                       "lineHeight": 1.52,
                       "fontFamily": "$font-sans",
                       "fontSize": 13,
@@ -16551,7 +16613,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "12 mm rolled plate, EN AW-6082-T651 or 6061-T651. Not 5083 cast plate, which anodises grey and blotchy.",
+                      "content": "Rolled plate at least 1 mm thicker than the part, so 12 mm for the default deck. EN AW-6082-T651 or 6061-T651. Not 5083 cast plate, which anodises grey and blotchy.",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
                       "fontSize": 12.5,
@@ -17251,6 +17313,7 @@
                   "content": "WHAT THE AGENT RUNS",
                   "fontFamily": "$font-mono",
                   "fontSize": 9.5,
+                  "fontWeight": "normal",
                   "letterSpacing": 0.9500000000000001
                 },
                 {
@@ -17331,7 +17394,7 @@
                   "fill": "$dusty",
                   "gap": 12,
                   "padding": [
-                    10,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17375,7 +17438,7 @@
                   },
                   "gap": 12,
                   "padding": [
-                    9,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17419,7 +17482,7 @@
                   },
                   "gap": 12,
                   "padding": [
-                    9,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17463,7 +17526,7 @@
                   },
                   "gap": 12,
                   "padding": [
-                    9,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17507,7 +17570,7 @@
                   },
                   "gap": 12,
                   "padding": [
-                    9,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17545,9 +17608,13 @@
                   "id": "h9FDuq",
                   "name": "Row",
                   "width": "fill_container",
+                  "stroke": "$hairline",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
                   "gap": 12,
                   "padding": [
-                    9,
+                    6,
                     16
                   ],
                   "alignItems": "center",
@@ -17562,7 +17629,8 @@
                       "content": "Label",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
-                      "fontSize": 12.5
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -17572,6 +17640,45 @@
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "Optional free text engraved under the title and version, such as a slot name.",
+                      "lineHeight": 1.38,
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "P8nW8",
+                  "name": "Row",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "padding": [
+                    6,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "dhU1j",
+                      "name": "Cell",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": 130,
+                      "content": "Deck",
+                      "lineHeight": 1.38,
+                      "fontFamily": "$font-sans",
+                      "fontSize": 12.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "Smx7m",
+                      "name": "Cell",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Optional thickness in mm, 5 by default. A thicker deck takes larger screw heads.",
                       "lineHeight": 1.38,
                       "fontFamily": "$font-sans",
                       "fontSize": 12.5
@@ -18399,7 +18506,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": 200,
-                      "content": "5.00 ±0.05",
+                      "content": "Deck, 5.00 default, ±0.05",
                       "lineHeight": 1.35,
                       "fontFamily": "$font-mono",
                       "fontSize": 12,
@@ -18511,7 +18618,7 @@
                       "fill": "$ink",
                       "textGrowth": "fixed-width",
                       "width": 200,
-                      "content": "134 × 94 × 11",
+                      "content": "134 × 94 × (deck + 6)",
                       "lineHeight": 1.35,
                       "fontFamily": "$font-mono",
                       "fontSize": 12,
