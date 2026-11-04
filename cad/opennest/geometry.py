@@ -162,7 +162,7 @@ def _sample(segment, n=6):
 
 def _text_tool(text, size, x, y, z, height, halign="center", valign="center"):
     """Engraving tool for a line of text, built straight from the font's curves: OpenCascade's own
-    text builder makes inverted solids from this font, and these outlines cut as true curves."""
+    text builder needs fontconfig, and these outlines cut as true curves."""
     font = TTFont(s.FONT)
     glyphs, cmap, hmtx = font.getGlyphSet(), font.getBestCmap(), font["hmtx"]
     scale = size / font["head"].unitsPerEm
@@ -222,7 +222,7 @@ def build(plan: Plan):
         return cq.Workplane("XY").add(cq.Solid.extrudeLinear(cq.Face.makeFromWires(outer), cq.Vector(0, 0, z1 - z0))).translate((0, 0, z0))
 
     def tab_x(sx, sy):
-        pts = [(wall_x, s.SEAT), (outer_x + 1, s.SEAT), (outer_x + 1, s.TOP), (wall_x + s.CHAMFER_IN, s.TOP), (wall_x, s.TOP - s.CHAMFER_UP)]
+        pts = [(wall_x, s.SEAT), (outer_x + 1, s.SEAT), (outer_x + 1, s.TOP), (wall_x + plan.chamfer_x, s.TOP), (wall_x, s.TOP - s.CHAMFER_UP)]
         y0, y1 = sorted((sy * plan.corner_y0[(sx, sy)], sy * (outer_y + 1)))
         return cq.Workplane("XZ", origin=(0, y0, 0)).polyline([(sx * x, z) for x, z in pts]).close().extrude(-(y1 - y0))
 
@@ -308,18 +308,18 @@ def build(plan: Plan):
 
     def engrave(wp, solids):
         for solid in solids:
-            wp = wp.cut(cq.Workplane("XY").add(solid))
+            wp = wp.cut(cq.Workplane("XY").add(solid), clean=False)  # cleaning the seat after every glyph takes many GB
         return wp
 
     if plan.engrave_logo:
         logo = _svg_faces(s.LOGO_SVG, s.LOGO_H, s.LOGO_CENTER, floor_z)
-        body = body.cut(cq.Workplane("XY").add(cq.Solid.extrudeLinear(logo, cq.Vector(0, 0, tool_height))))
+        body = body.cut(cq.Workplane("XY").add(cq.Solid.extrudeLinear(logo, cq.Vector(0, 0, tool_height))), clean=False)
+    solids, bounds = _text_tool(plan.title, s.TITLE_H, *s.TITLE_CENTER, floor_z, tool_height)
     if plan.engrave_title:
-        solids, bounds = _text_tool(plan.title, s.TITLE_H, *s.TITLE_CENTER, floor_z, tool_height)
         body = engrave(body, solids)
-        if plan.label:
-            solids, _ = _text_tool(plan.label, s.SUB_H, bounds[1], bounds[2] - s.SUB_GAP, floor_z, tool_height, halign="right", valign="top")
-            body = engrave(body, solids)
+    if plan.label and plan.engrave_label:  # free text, right-aligned under the title
+        solids, _ = _text_tool(plan.label, s.SUB_H, bounds[1], bounds[2] - s.SUB_GAP, floor_z, tool_height, halign="right", valign="top")
+        body = engrave(body, solids)
 
     if fillet.failed:
         raise RuntimeError(f"{req.name}: fillets failed: {fillet.failed}\n" + "\n".join(fillet.log))

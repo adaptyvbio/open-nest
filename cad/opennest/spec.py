@@ -11,7 +11,7 @@ from pathlib import Path
 VERSION = "1.4"
 REPO = Path(__file__).resolve().parents[2]
 LOGO_SVG = REPO / "design/brand/adaptyv-mark.svg"
-FONT = REPO / "design/fonts/Geist-700.ttf"
+FONT = REPO / "cad/assets/LiberationSans-Bold.ttf"  # the engraving font; Geist outlines overlap themselves and cannot be cut cleanly
 BAMBU_TEMPLATE = REPO / "cad/assets/bambu-h2d-template.3mf"
 
 # ---- envelope and heights
@@ -22,11 +22,18 @@ R_CORNER = 3.0  # plan-view radius on the four plate corners
 R_EDGE = 0.5  # every exposed convex edge; Type II anodise needs no more, thick hardcoat does
 BOTTOM_EDGE = 0.5  # underside perimeter break
 
+# ---- tolerances a shop works to
+TOL_POCKET = "+0.10/0"
+TOL_SEAT = "\u00b10.05"
+TOL_FLATNESS = 0.05
+TOL_GENERAL = "\u00b10.1, ISO 2768-f"
+
 # ---- guide tabs. The inward wall position comes from the pocket.
 CORNER_TAB_Y0 = 24.0  # corner tabs run from here to the plate edge, on the short sides
 CORNER_TAB_Y0_MAX = 33.0  # a hole may push a corner tab start back this far, no further
 SIDE_TAB_X = (30.0, 56.0)  # side tabs on the long sides
 CHAMFER_IN, CHAMFER_UP = 1.732, 3.0  # 30 deg from vertical, starting 3 mm above the seat
+MIN_TAB_LAND = 0.85  # top of a tab, room for the R_EDGE rounds on both of its edges
 R_BASE = 0.8  # construction only: the R_EDGE rounds chain through this fillet, then it is cut away
 
 # ---- gripper notches, centred on each long side

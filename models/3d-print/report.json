@@ -1,0 +1,129 @@
+{
+ "name": "blank-3d-print",
+ "version": "1.4",
+ "ok": true,
+ "errors": [],
+ "warnings": [
+  "Print shrink closes the pocket. Measure it (X 128.1 to 128.5, Y 85.8 to 86.2) and rebuild with --xy-scale target/measured if it is off."
+ ],
+ "material": "PLA",
+ "process": "3d-print",
+ "pocket_mm": [
+  128.3,
+  86.0
+ ],
+ "catch_per_side_mm": [
+  2.0,
+  1.99
+ ],
+ "holes": [],
+ "screw": null,
+ "head": null,
+ "through_d_mm": null,
+ "counterbore_mm": null,
+ "countersink_d_mm": null,
+ "sleeve": false,
+ "corner_tab_start_y_mm": [
+  24.0
+ ],
+ "engraving": {
+  "title": "Adaptyv OpenNest v1.4",
+  "label": "Blank",
+  "mark": true
+ },
+ "xy_scale": 1.0,
+ "checks": {
+  "count": 43,
+  "failures": []
+ },
+ "fillets": [
+  "tab base (construction): 20 edges R0.8 ok",
+  "convex edges: 104 edges R0.5 ok",
+  "underside perimeter: 12 edges R0.5 ok"
+ ],
+ "fit_clearance_mm": [
+  {
+   "t_c": 15.0,
+   "plate": "nominal",
+   "x": 0.541,
+   "y": 0.521
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.291,
+   "y": 0.271
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.041,
+   "y": 0.021
+  },
+  {
+   "t_c": 20.0,
+   "plate": "nominal",
+   "x": 0.54,
+   "y": 0.52
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.29,
+   "y": 0.27
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.04,
+   "y": 0.02
+  },
+  {
+   "t_c": 25.0,
+   "plate": "nominal",
+   "x": 0.539,
+   "y": 0.519
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.289,
+   "y": 0.269
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.039,
+   "y": 0.019
+  },
+  {
+   "t_c": 37.0,
+   "plate": "nominal",
+   "x": 0.536,
+   "y": 0.518
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.286,
+   "y": 0.267
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.036,
+   "y": 0.017
+  }
+ ],
+ "volume_cm3": 62.92,
+ "not_checked": [
+  "Whether the holes match your deck: measure it before you cut.",
+  "Fit on real plates and on a robot."
+ ],
+ "files": [
+  "nest.stl",
+  "nest.toml",
+  "nest.3mf",
+  "report.json"
+ ]
+}

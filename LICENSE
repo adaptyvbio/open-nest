@@ -1,0 +1,17 @@
+OpenNest is licensed in parts. Full texts are in LICENSES/ and design/fonts/.
+
+Hardware design: CERN-OHL-P-2.0
+  cad/, models/ and everything cad/nest.py generates.
+
+Documentation and figures: CC-BY-4.0
+  docs/, design/opennest.pen, design/logo/ glyph artwork, *.md.
+
+Tests and tooling: MIT
+  tests/, tools/, .github/.
+
+Fonts: SIL Open Font License 1.1
+  design/fonts/ (Geist) and cad/assets/LiberationSans-Bold.ttf.
+
+Not licensed: the Adaptyv name and logo, including design/brand/. See TRADEMARKS.md.
+
+Copyright 2026 Adaptyv

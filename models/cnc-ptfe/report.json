@@ -1,0 +1,129 @@
+{
+ "name": "blank-cnc-ptfe",
+ "version": "1.4",
+ "ok": true,
+ "errors": [],
+ "warnings": [
+  "Solid PTFE changes size through 19 to 23 C. The pocket is 129 x 86.5 mm, so a nominal plate floats about +-0.62 mm in X and +-0.51 mm in Y. Use it for 96-well plates only."
+ ],
+ "material": "Solid PTFE",
+ "process": "cnc-ptfe",
+ "pocket_mm": [
+  129.0,
+  86.5
+ ],
+ "catch_per_side_mm": [
+  2.35,
+  2.24
+ ],
+ "holes": [],
+ "screw": null,
+ "head": null,
+ "through_d_mm": null,
+ "counterbore_mm": null,
+ "countersink_d_mm": null,
+ "sleeve": false,
+ "corner_tab_start_y_mm": [
+  24.0
+ ],
+ "engraving": {
+  "title": "Adaptyv OpenNest v1.4",
+  "label": "Blank",
+  "mark": true
+ },
+ "xy_scale": 1.0,
+ "checks": {
+  "count": 43,
+  "failures": []
+ },
+ "fillets": [
+  "tab base (construction): 20 edges R0.8 ok",
+  "convex edges: 104 edges R0.5 ok",
+  "underside perimeter: 12 edges R0.5 ok"
+ ],
+ "fit_clearance_mm": [
+  {
+   "t_c": 15.0,
+   "plate": "nominal",
+   "x": 0.566,
+   "y": 0.568
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.316,
+   "y": 0.318
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.066,
+   "y": 0.068
+  },
+  {
+   "t_c": 20.0,
+   "plate": "nominal",
+   "x": 1.188,
+   "y": 0.985
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.938,
+   "y": 0.735
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.688,
+   "y": 0.485
+  },
+  {
+   "t_c": 25.0,
+   "plate": "nominal",
+   "x": 1.23,
+   "y": 1.013
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.98,
+   "y": 0.763
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.73,
+   "y": 0.513
+  },
+  {
+   "t_c": 37.0,
+   "plate": "nominal",
+   "x": 1.332,
+   "y": 1.082
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, corner zone",
+   "x": 1.081,
+   "y": 0.831
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.831,
+   "y": 0.581
+  }
+ ],
+ "volume_cm3": 62.58,
+ "not_checked": [
+  "Whether the holes match your deck: measure it before you cut.",
+  "Fit on real plates and on a robot."
+ ],
+ "files": [
+  "nest.step",
+  "nest.toml",
+  "drawing.pdf",
+  "report.json"
+ ]
+}

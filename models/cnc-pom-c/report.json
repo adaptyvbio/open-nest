@@ -1,0 +1,129 @@
+{
+ "name": "blank-cnc-pom-c",
+ "version": "1.4",
+ "ok": true,
+ "errors": [],
+ "warnings": [
+  "Polymers creep under screw heads. Keep torque low and recheck it after a day."
+ ],
+ "material": "POM-C",
+ "process": "cnc-polymer",
+ "pocket_mm": [
+  128.4,
+  86.1
+ ],
+ "catch_per_side_mm": [
+  2.05,
+  2.04
+ ],
+ "holes": [],
+ "screw": null,
+ "head": null,
+ "through_d_mm": null,
+ "counterbore_mm": null,
+ "countersink_d_mm": null,
+ "sleeve": false,
+ "corner_tab_start_y_mm": [
+  24.0
+ ],
+ "engraving": {
+  "title": "Adaptyv OpenNest v1.4",
+  "label": "Blank",
+  "mark": true
+ },
+ "xy_scale": 1.0,
+ "checks": {
+  "count": 43,
+  "failures": []
+ },
+ "fillets": [
+  "tab base (construction): 20 edges R0.8 ok",
+  "convex edges: 104 edges R0.5 ok",
+  "underside perimeter: 12 edges R0.5 ok"
+ ],
+ "fit_clearance_mm": [
+  {
+   "t_c": 15.0,
+   "plate": "nominal",
+   "x": 0.614,
+   "y": 0.603
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.364,
+   "y": 0.353
+  },
+  {
+   "t_c": 15.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.114,
+   "y": 0.103
+  },
+  {
+   "t_c": 20.0,
+   "plate": "nominal",
+   "x": 0.64,
+   "y": 0.62
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.39,
+   "y": 0.37
+  },
+  {
+   "t_c": 20.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.14,
+   "y": 0.12
+  },
+  {
+   "t_c": 25.0,
+   "plate": "nominal",
+   "x": 0.666,
+   "y": 0.637
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.416,
+   "y": 0.387
+  },
+  {
+   "t_c": 25.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.166,
+   "y": 0.137
+  },
+  {
+   "t_c": 37.0,
+   "plate": "nominal",
+   "x": 0.728,
+   "y": 0.679
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, corner zone",
+   "x": 0.478,
+   "y": 0.429
+  },
+  {
+   "t_c": 37.0,
+   "plate": "SLAS max, along a side",
+   "x": 0.227,
+   "y": 0.179
+  }
+ ],
+ "volume_cm3": 62.86,
+ "not_checked": [
+  "Whether the holes match your deck: measure it before you cut.",
+  "Fit on real plates and on a robot."
+ ],
+ "files": [
+  "nest.step",
+  "nest.toml",
+  "drawing.pdf",
+  "report.json"
+ ]
+}

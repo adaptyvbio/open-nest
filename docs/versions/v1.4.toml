@@ -1,0 +1,95 @@
+# OpenNest v1.4. All dimensions in mm.
+
+[design]
+opennest_version = "1.4"
+origin = "plate centre, Z 0 at the underside"
+units = "mm"
+
+[plate]
+length_x = 134.0
+depth_y = 94.0
+height_z = 11.0
+seat_above_underside = 5.0
+tab_above_seat = 6.0
+corner_radius = 3.0
+edge_radius = 0.5
+underside_break = 0.5
+
+[tolerances]
+pocket = "+0.10/0"
+seat_height = "±0.05"
+seat_flatness = 0.05
+general = "±0.1, ISO 2768-f"
+
+[tabs]
+count = 8
+corner_tab_y_from = 24.0
+corner_tab_y_to = 47.0
+side_tab_x_from = 30.0
+side_tab_x_to = 56.0
+lead_in_degrees_from_vertical = 30
+lead_in_up = 3.0
+lead_in_inward = 1.732
+straight_wall_above_seat = 3.0
+
+[notches]
+count = 2
+width_x = 40.0
+depth_y = 8.5
+inside_radius = 4.0
+mouth_radius = 2.0
+
+[engraving]
+depth = 0.3
+title_em = 6.0
+label_em = 4.0
+mark_height = 30.0
+
+[plate_standard]
+standard = "ANSI SLAS 1-2004, at 20 C"
+nominal_x = 127.76
+nominal_y = 85.48
+tolerance_within_12_7_mm_of_corners = 0.25
+tolerance_along_a_side = 0.5
+
+[pocket_by_material]
+
+[pocket_by_material.pla]
+process = "3d-print"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.petg]
+process = "3d-print"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.asa]
+process = "3d-print"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.6082]
+process = "cnc-aluminium"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.6061]
+process = "cnc-aluminium"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.pom-c]
+process = "cnc-polymer"
+pocket_x = 128.4
+pocket_y = 86.1
+
+[pocket_by_material.peek]
+process = "cnc-polymer"
+pocket_x = 128.3
+pocket_y = 86.0
+
+[pocket_by_material.ptfe]
+process = "cnc-ptfe"
+pocket_x = 129.0
+pocket_y = 86.5

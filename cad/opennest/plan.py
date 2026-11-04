@@ -46,9 +46,15 @@ class Plan:
     corner_y0: dict = field(default_factory=lambda: {(sx, sy): s.CORNER_TAB_Y0 for sx in (-1, 1) for sy in (-1, 1)})
     engrave_logo: bool = True
     engrave_title: bool = True
+    engrave_label: bool = True
     label: str | None = None
     errors: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+
+    @property
+    def chamfer_x(self) -> float:
+        """A wider pocket thins the corner tabs, so the lead-in gives way to keep room for the edge rounds."""
+        return min(s.CHAMFER_IN, s.L / 2 - self.pocket_x / 2 - s.MIN_TAB_LAND)
 
     @property
     def title(self) -> str:
@@ -196,20 +202,25 @@ def _plan_engraving(plan: Plan) -> None:
         if not can_engrave(text):
             plan.errors.append(f"The engraving font has no glyph for a character in {text!r}.")
     if plan.label and text_width(plan.label, s.SUB_H) > text_width(plan.title, s.TITLE_H):
-        plan.errors.append(f"--label {plan.label!r} is wider than the title. Shorten it.")
+        plan.errors.append(f"--label {plan.label!r} is wider than the title line above it, {text_width(plan.title, s.TITLE_H):.0f} mm at this size. Shorten it.")
     if not req.branding:
         plan.engrave_logo = False
     r = plan.head_r + 1.0
     half_logo = s.LOGO_H / 2
     half_title = text_width(plan.title, s.TITLE_H) / 2 + 0.5
-    bottom = s.TITLE_CENTER[1] - s.TITLE_H / 2 - (s.SUB_GAP + s.SUB_H if plan.label else 0)
+    title_bottom = s.TITLE_CENTER[1] - s.TITLE_H / 2
     for x, y in req.holes:
         if plan.engrave_logo and _rect_gap((x, y), s.LOGO_CENTER[0] - half_logo, s.LOGO_CENTER[0] + half_logo, s.LOGO_CENTER[1] - half_logo, s.LOGO_CENTER[1] + half_logo) < r:
             plan.engrave_logo = False
             plan.warnings.append("A hole lands on the engraved mark, so the mark is left off.")
-        if plan.engrave_title and _rect_gap((x, y), -half_title, half_title, bottom, s.TITLE_CENTER[1] + s.TITLE_H / 2) < r:
+        if plan.engrave_title and _rect_gap((x, y), -half_title, half_title, title_bottom, s.TITLE_CENTER[1] + s.TITLE_H / 2) < r:
             plan.engrave_title = False
-            plan.warnings.append("A hole lands on the engraved title, so the title and label are left off.")
+            plan.warnings.append("A hole lands on the engraved title and version, so they are left off the plate. Move the hole if you want them.")
+        if plan.label and plan.engrave_label:
+            left = half_title - text_width(plan.label, s.SUB_H) - 0.5
+            if _rect_gap((x, y), left, half_title, title_bottom - s.SUB_GAP - s.SUB_H, title_bottom - s.SUB_GAP) < r:
+                plan.engrave_label = False
+                plan.warnings.append(f"A hole lands on the engraved label {plan.label!r}, so it is left off the plate. Move the hole if you want it.")
 
 
 def make_plan(req: Request) -> Plan:
@@ -262,6 +273,6 @@ def summary(plan: Plan) -> dict:
         "countersink_d_mm": plan.csk_d,
         "sleeve": bool(plan.material and plan.material.process == "cnc-ptfe" and req.holes),
         "corner_tab_start_y_mm": sorted(set(plan.corner_y0.values())),
-        "engraving": {"title": plan.title if plan.engrave_title else None, "label": plan.label if plan.engrave_title else None, "mark": plan.engrave_logo},
+        "engraving": {"title": plan.title if plan.engrave_title else None, "label": plan.label if plan.engrave_label else None, "mark": plan.engrave_logo},
         "xy_scale": req.xy_scale,
     }

@@ -1,0 +1,22 @@
+# Open Know-How manifest. See https://github.com/iop-alliance/OpenKnowHow
+okhv = "2.4"
+name = "OpenNest"
+repo = "https://github.com/adaptyvbio/open-nest"
+license = "CERN-OHL-P-2.0"
+licensor = "Adaptyv"
+organization = "Adaptyv"
+function = "Holds an SBS microplate at a known position on a lab automation deck, with a lead-in that catches robot placement error and notches for gripper fingers. Users define their own mounting holes with an agent-run script."
+documentation-language = "en-GB"
+version = "1.4.0"
+readme = "README.md"
+contribution-guide = "CONTRIBUTING.md"
+technology-readiness-level = "OTRL-4"
+documentation-readiness-level = "ODRL-2"
+manufacturing-instructions = "docs/OpenNest-Guide.pdf"
+source = ["cad/nest.py", "cad/opennest/spec.py", "cad/opennest/geometry.py"]
+standard-compliance = "ANSI SLAS 1-2004"
+
+[outer-dimensions]
+width = 134
+depth = 94
+height = 11

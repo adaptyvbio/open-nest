@@ -1,0 +1,54 @@
+name: Fit report
+description: You made a plate. Tell us how it measures and how it runs.
+title: "Fit report: "
+labels: ["fit report"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: OpenNest version
+      description: The version engraved on the plate.
+      placeholder: v1.4
+    validations:
+      required: true
+  - type: input
+    id: process
+    attributes:
+      label: Process and material
+      placeholder: Bambu H2D, 0.4 mm nozzle, Bambu PLA Basic. Or the CNC shop and alloy.
+    validations:
+      required: true
+  - type: input
+    id: pocket
+    attributes:
+      label: Pocket as measured, X x Y in mm
+      description: Between opposing tab walls, at the seat, at room temperature.
+      placeholder: 128.26 x 85.97
+    validations:
+      required: true
+  - type: input
+    id: scale
+    attributes:
+      label: XY scale used, for a print
+      placeholder: "1.0031"
+  - type: input
+    id: seat
+    attributes:
+      label: Seat height from the underside, in mm
+      placeholder: "5.02"
+  - type: textarea
+    id: plates
+    attributes:
+      label: Plates tried
+      description: Maker, part number and what happened. Did it drop in, and did it sit flat?
+    validations:
+      required: true
+  - type: textarea
+    id: robot
+    attributes:
+      label: Robot
+      description: Which robot or gripper, how many cycles, and any contact, slip or missed picks.
+  - type: textarea
+    id: notes
+    attributes:
+      label: What would you change?
