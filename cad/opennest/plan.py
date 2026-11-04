@@ -198,9 +198,14 @@ def _plan_holes(plan: Plan) -> None:
 def _plan_engraving(plan: Plan) -> None:
     req = plan.request
     plan.label = req.label if req.label is not None else ("Blank" if req.blank else None)
-    for text in filter(None, (plan.title, plan.label)):
-        if not can_engrave(text):
-            plan.errors.append(f"The engraving font has no glyph for a character in {text!r}.")
+    if plan.label is not None and not plan.label.strip():
+        plan.errors.append("--label is empty. Leave it out for no label.")
+        plan.label = None
+    if plan.label and not can_engrave(plan.label):
+        cmap, _, _ = _font()
+        missing = "".join(sorted({ch for ch in plan.label if ord(ch) not in cmap}))
+        plan.errors.append(f"--label {plan.label!r} has characters the engraving font lacks: {missing!r}. Use Latin, Greek or Cyrillic text.")
+        return
     if plan.label and text_width(plan.label, s.SUB_H) > text_width(plan.title, s.TITLE_H):
         plan.errors.append(f"--label {plan.label!r} is wider than the title line above it, {text_width(plan.title, s.TITLE_H):.0f} mm at this size. Shorten it.")
     if not req.branding:

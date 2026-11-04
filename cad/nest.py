@@ -39,15 +39,21 @@ def parse_spacing(text: str) -> tuple[tuple[float, float], ...]:
     return ((-a, -b), (-a, b), (a, -b), (a, b))
 
 
+def fail(message: str) -> None:
+    """A request that cannot be built, with the same exit code as one the plan refuses."""
+    print("ERROR  ", message)
+    raise SystemExit(2)
+
+
 def request_from(args) -> Request:
     if not args.material:
-        raise SystemExit("--material is required, unless you build from --config.")
+        fail("--material is required, unless you build from --config.")
     if args.holes and args.spacing:
-        raise SystemExit("Use --holes or --spacing, not both.")
+        fail("Use --holes or --spacing, not both.")
     try:
         holes = parse_holes(args.holes) if args.holes else parse_spacing(args.spacing) if args.spacing else ()
     except ValueError:
-        raise SystemExit("Could not read the holes. Use --holes \"x,y x,y\" or --spacing 110x60.") from None
+        fail('Could not read the holes. Use --holes "x,y x,y" or --spacing 110x60.')
     return Request(
         name=args.name,
         material=args.material,
@@ -170,9 +176,16 @@ def main() -> int:
         return 0
 
     if args.config:
+        import tomllib
+
         from opennest.record import read_request
 
-        request, built_version, commit = read_request(args.config)
+        try:
+            request, built_version, commit = read_request(args.config)
+        except OSError as exc:
+            fail(f"Could not read {args.config}: {exc.strerror}.")
+        except (tomllib.TOMLDecodeError, KeyError) as exc:
+            fail(f"{args.config} is not an OpenNest design record: {exc}.")
         plan = make_plan(request)
         if built_version != s.VERSION:
             where = f"Check out commit {commit} to build it exactly." if commit else "Check out that version to build it exactly."

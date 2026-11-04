@@ -105,6 +105,12 @@ def test_label_must_fit_under_the_title():
     assert not plan(blank=True, label="x" * 80).ok
 
 
+@pytest.mark.parametrize("label", ["Slot \u2603", "   "])
+def test_bad_labels_are_errors_and_not_crashes(label):
+    p = plan(blank=True, label=label)
+    assert not p.ok and any("--label" in e for e in p.errors)
+
+
 def test_a_hole_on_the_label_drops_only_the_label():
     p = cap(((26, -24), (-26, 24)), label="Slot A3")
     assert p.ok and p.engrave_title and not p.engrave_label
@@ -183,3 +189,30 @@ def test_xy_scale_is_for_prints_and_small():
 
 def test_unknown_material_is_an_error():
     assert not plan(material="wood", blank=True).ok
+
+
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["check", "--screw", "M3"],
+        ["check", "--material", "6082", "--holes", "abc"],
+        ["check", "--material", "6082", "--holes", "1,2", "--spacing", "110x60"],
+        ["check", "--config", "/nonexistent.toml"],
+        ["check", "--material", "6082", "--screw", "M3", "--head", "cap", "--holes", "80,0"],
+    ],
+)
+def test_bad_requests_exit_2_with_a_message(args, capsys, monkeypatch):
+    import nest
+
+    monkeypatch.setattr("sys.argv", ["nest.py", *args])
+    with pytest.raises(SystemExit) as stop:
+        raise SystemExit(nest.main())
+    assert stop.value.code == 2
+    assert "ERROR" in capsys.readouterr().out
+
+
+def test_a_good_check_exits_0(monkeypatch):
+    import nest
+
+    monkeypatch.setattr("sys.argv", ["nest.py", "check", "--material", "6082", "--screw", "M3", "--head", "cap", "--spacing", "110x60"])
+    assert nest.main() == 0
