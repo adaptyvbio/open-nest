@@ -3,8 +3,11 @@
  "version": "1.4",
  "ok": true,
  "errors": [],
- "warnings": [],
+ "warnings": [
+  "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+ ],
  "material": "EN AW-6082-T651",
+ "test_status": "Not tested: no v1.4 plate has been made in EN AW-6082-T651. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
  "process": "cnc-aluminium",
  "pocket_mm": [
   128.3,
@@ -115,6 +118,7 @@
  ],
  "volume_cm3": 62.92,
  "not_checked": [
+  "This exact part: the checks read the file, not a real plate.",
   "Whether the holes match your deck: measure it before you cut.",
   "Fit on real plates and on a robot."
  ],

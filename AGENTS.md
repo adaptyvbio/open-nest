@@ -64,8 +64,12 @@ If a printed pocket measures off (accept X 128.1 to 128.5, Y 85.8 to 86.2), rebu
 
 - Do not edit `cad/opennest/spec.py` to make a pattern fit. Move the holes. If the user really wants
   different fixed geometry, say that it leaves the reference design, and use `--no-branding`.
-- Never say a part is tested. `report.json` shows that the file matches its plan. It cannot show
-  that the holes match the user's deck, or that a plate fits on their robot. Tell them to measure.
+- Be exact about testing. The only real test of v1.4 is a plate printed in PLA on a Bambu H2D. No
+  plate has been machined, made in another material or run on a robot. `check` and `make` print
+  this for the chosen material as their first warning, so always pass it on.
+- `report.json` shows that the file matches its plan. That is a software check, not a part test. It
+  cannot show that the holes match the user's deck, or that a plate fits their robot. Tell them to
+  measure.
 - Solid PTFE changes size at room temperature. Only suggest it if they ask, and pass on its warning.
 - Do not commit anything in `out/`.
 

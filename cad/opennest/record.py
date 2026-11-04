@@ -84,8 +84,13 @@ def fixed_dimensions() -> dict:
 
 def version_reference() -> dict:
     """The reference file kept in the repo for this version."""
-    pockets = {key: {"process": m.process, "pocket_x": s.pocket_for(m)[0], "pocket_y": s.pocket_for(m)[1]} for key, m in s.MATERIALS.items()}
-    return {"design": {"opennest_version": s.VERSION, "origin": "plate centre, Z 0 at the underside", "units": "mm"}, **fixed_dimensions(), "pocket_by_material": pockets}
+    pockets = {key: {"process": m.process, "pocket_x": s.pocket_for(m)[0], "pocket_y": s.pocket_for(m)[1], "tested": key in s.TESTED_MATERIALS} for key, m in s.MATERIALS.items()}
+    return {
+        "design": {"opennest_version": s.VERSION, "origin": "plate centre, Z 0 at the underside", "units": "mm"},
+        "status": {"tested": s.ONLY_TEST},
+        **fixed_dimensions(),
+        "pocket_by_material": pockets,
+    }
 
 
 def design_record(plan: Plan) -> dict:
@@ -133,6 +138,7 @@ def design_record(plan: Plan) -> dict:
     catch_x -= s.CHAMFER_IN - plan.chamfer_x
     return {
         "design": design,
+        "status": {"this_material": s.test_status(plan.material), "tested": s.ONLY_TEST, "this_file": "Checked against its plan by software. This exact part has not been made."},
         "request": request,
         "material": {"title": plan.material.title, "process": plan.material.process},
         "pocket": {

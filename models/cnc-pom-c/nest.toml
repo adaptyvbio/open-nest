@@ -10,6 +10,11 @@ command = "uv run cad/nest.py make --material pom-c --name blank-cnc-pom-c --bla
 origin = "plate centre, Z 0 at the underside"
 units = "mm"
 
+[status]
+this_material = "Not tested: no v1.4 plate has been made in POM-C. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+this_file = "Checked against its plan by software. This exact part has not been made."
+
 [request]
 name = "blank-cnc-pom-c"
 material = "pom-c"

@@ -5,6 +5,9 @@ opennest_version = "1.4"
 origin = "plate centre, Z 0 at the underside"
 units = "mm"
 
+[status]
+tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+
 [plate]
 length_x = 134.0
 depth_y = 94.0
@@ -58,38 +61,46 @@ tolerance_along_a_side = 0.5
 process = "3d-print"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = true
 
 [pocket_by_material.petg]
 process = "3d-print"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = false
 
 [pocket_by_material.asa]
 process = "3d-print"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = false
 
 [pocket_by_material.6082]
 process = "cnc-aluminium"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = false
 
 [pocket_by_material.6061]
 process = "cnc-aluminium"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = false
 
 [pocket_by_material.pom-c]
 process = "cnc-polymer"
 pocket_x = 128.4
 pocket_y = 86.1
+tested = false
 
 [pocket_by_material.peek]
 process = "cnc-polymer"
 pocket_x = 128.3
 pocket_y = 86.0
+tested = false
 
 [pocket_by_material.ptfe]
 process = "cnc-ptfe"
 pocket_x = 129.0
 pocket_y = 86.5
+tested = false

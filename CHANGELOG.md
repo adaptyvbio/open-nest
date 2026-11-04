@@ -4,6 +4,7 @@ The version is engraved on every plate, so a plate always says which design it i
 
 ## v1.4
 
+- Printed in PLA on a Bambu H2D. This is the only real test of this version so far.
 - The pocket opens in X from 128.0 to 128.3 mm, so every plate within SLAS 1-2004 fits at 20 C.
 - Holes become user-defined. `cad/nest.py` builds any pattern that passes its checks, and fixed
   mounting variants are gone.
@@ -12,7 +13,7 @@ The version is engraved on every plate, so a plate always says which design it i
   fixed dimensions.
 - `--label` engraves free text under the title and version, such as a slot name.
 - The flat head countersink is a true 90 degrees, 6.5 mm at the seat for M3. Earlier versions cut
-  about 5.1 mm, so a flat head could sit above the seat.
+  about 5.1 mm at the seat, so a flat head could sit above it.
 - The pocket is sized by material, and Solid PTFE gets its own pocket and metal sleeves.
 - One parametric builder replaces a script per plate. The engraved mark is now true curves, which
   cuts the STEP file from about 6.8 MB to about 4 MB and gives a CNC cleaner toolpaths.

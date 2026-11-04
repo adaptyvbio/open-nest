@@ -10,6 +10,11 @@ command = "uv run cad/nest.py make --material pla --name blank-3d-print --blank"
 origin = "plate centre, Z 0 at the underside"
 units = "mm"
 
+[status]
+this_material = "Tested: v1.4 has been printed on a Bambu H2D in PLA. It has not been run on a robot, and no measurements are recorded yet."
+tested = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+this_file = "Checked against its plan by software. This exact part has not been made."
+
 [request]
 name = "blank-3d-print"
 material = "pla"

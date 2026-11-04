@@ -98,6 +98,17 @@ MATERIALS = {
     )
 }
 
+# ---- what has really been tested on this version. Update it only when a real part says so.
+TESTED_MATERIALS = {"pla": "printed on a Bambu H2D"}
+ONLY_TEST = "The only test so far is a v1.4 plate printed in PLA on a Bambu H2D."
+
+
+def test_status(material: Material) -> str:
+    if material.key in TESTED_MATERIALS:
+        return f"Tested: v{VERSION} has been {TESTED_MATERIALS[material.key]} in {material.title}. It has not been run on a robot, and no measurements are recorded yet."
+    return f"Not tested: no v{VERSION} plate has been made in {material.title}. {ONLY_TEST}"
+
+
 # ---- ANSI SLAS 1-2004, at 20 C. Tolerances do not include draft.
 PLATE_X, PLATE_Y = 127.76, 85.48
 TOL_CORNER, TOL_SIDE = 0.25, 0.5  # within 12.7 mm of the corners, and anywhere along a side

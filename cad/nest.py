@@ -122,7 +122,7 @@ def make(plan: Plan, out: Path, as_json: bool) -> int:
             "fillets": log,
             "fit_clearance_mm": s.fit_rows(plan.material, plan.pocket_x, plan.pocket_y),
             "volume_cm3": round(body.val().Volume() / 1000, 2),
-            "not_checked": ["Whether the holes match your deck: measure it before you cut.", "Fit on real plates and on a robot."],
+            "not_checked": ["This exact part: the checks read the file, not a real plate.", "Whether the holes match your deck: measure it before you cut.", "Fit on real plates and on a robot."],
             "files": [f.name for f in files] + ["report.json"],
             "seconds": round(time.time() - start),
         }

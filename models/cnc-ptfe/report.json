@@ -4,9 +4,11 @@
  "ok": true,
  "errors": [],
  "warnings": [
+  "Not tested: no v1.4 plate has been made in Solid PTFE. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
   "Solid PTFE changes size through 19 to 23 C. The pocket is 129 x 86.5 mm, so a nominal plate floats about +-0.62 mm in X and +-0.51 mm in Y. Use it for 96-well plates only."
  ],
  "material": "Solid PTFE",
+ "test_status": "Not tested: no v1.4 plate has been made in Solid PTFE. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
  "process": "cnc-ptfe",
  "pocket_mm": [
   129.0,
@@ -117,6 +119,7 @@
  ],
  "volume_cm3": 62.58,
  "not_checked": [
+  "This exact part: the checks read the file, not a real plate.",
   "Whether the holes match your deck: measure it before you cut.",
   "Fit on real plates and on a robot."
  ],

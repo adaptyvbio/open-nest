@@ -8,6 +8,19 @@ for 3D printing, aluminium CNC or other materials.
 
 **[Design and manufacturing guide (PDF)](docs/OpenNest-Guide.pdf)**
 
+## What has been tested
+
+| v1.4 | Status |
+| --- | --- |
+| 3D print in PLA on a Bambu H2D | **Printed.** No measurements recorded yet |
+| 3D print in other materials | Not tested |
+| CNC aluminium | Not tested |
+| CNC POM-C or PEEK | Not tested |
+| CNC solid PTFE | Not tested |
+| On a robot | Not tested |
+
+That is the whole list. Every other number here is calculated from the model and the SLAS standard.
+
 ## Agent ready
 
 Open this repo in your coding agent and describe what you need:
@@ -62,8 +75,10 @@ If only the plate survives, read the version engraved on it and open
 | Catch | About 2.0 mm per side for a nominal plate |
 | Gripper notches | 40 x 8.5 mm, on both long sides |
 
-Every plate within ANSI SLAS 1-2004 fits at 20 C, with 0.02 mm to spare at the limit of the standard.
-The numbers are in [the guide](docs/OpenNest-Guide.pdf), along with the drawing, the tolerances and
+By calculation, every plate within ANSI SLAS 1-2004 fits at 20 C, with 0.02 mm to spare at the limit
+of the standard. Plastic plates grow faster than aluminium, so at 37 C a plate at the +-0.5 mm limit
+is 0.06 mm too big in X and 0.05 mm in Y, while one within +-0.25 mm still clears by about 0.2 mm.
+`report.json` has the table for your material. The numbers are in [the guide](docs/OpenNest-Guide.pdf), along with the drawing, the tolerances and
 an acceptance check.
 
 <p align="center"><img src="docs/img/plan-drawing.png" alt="Plan view with dimensions"></p>
@@ -72,14 +87,14 @@ an acceptance check.
 
 <p align="center"><img src="docs/img/manufacturing.png" alt="Print it, mill it, cut it"></p>
 
-| `--material` | Process | Pocket, mm | Notes |
-| --- | --- | --- | --- |
-| `pla` | 3D print | 128.3 x 86.0 | Bambu H2D project. Measure the pocket and correct shrink with `--xy-scale` |
-| `petg`, `asa` | 3D print | 128.3 x 86.0 | Plain 3MF, so set up your own slicer profile |
-| `6082`, `6061` | CNC aluminium | 128.3 x 86.0 | Type II anodise |
-| `peek` | CNC polymer | 128.3 x 86.0 | Keep screw torque low |
-| `pom-c` | CNC polymer | 128.4 x 86.1 | Keep screw torque low |
-| `ptfe` | CNC PTFE | 129.0 x 86.5 | Changes size at room temperature, so 96-well plates only, on metal sleeves |
+| `--material` | Process | Pocket, mm | Tested | Notes |
+| --- | --- | --- | --- | --- |
+| `pla` | 3D print | 128.3 x 86.0 | Printed on a Bambu H2D | Bambu H2D project. Measure the pocket and correct shrink with `--xy-scale` |
+| `petg`, `asa` | 3D print | 128.3 x 86.0 | No | Plain 3MF, so set up your own slicer profile |
+| `6082`, `6061` | CNC aluminium | 128.3 x 86.0 | No | Type II anodise |
+| `peek` | CNC polymer | 128.3 x 86.0 | No | Keep screw torque low |
+| `pom-c` | CNC polymer | 128.4 x 86.1 | No | Keep screw torque low |
+| `ptfe` | CNC PTFE | 129.0 x 86.5 | No | Changes size at room temperature, so 96-well plates only, on metal sleeves |
 
 The pocket grows when the material would otherwise close on the largest SLAS plate at 15 C. The
 expansion figures behind that are typical handbook values, not measurements.
@@ -88,13 +103,14 @@ Reference plates with no holes are in [`models/`](models/). Each folder has a `r
 
 ## Status
 
-**Work in progress, and internal for now.** A v1.3 plate has been printed. This v1.4 geometry has not
-yet been printed, machined or run on a robot. Numbers here are calculated from the model and the SLAS
-standard.
+**Work in progress, and internal for now.** The test status is at [the top of this page](#what-has-been-tested).
 
 `cad/nest.py` checks that a file matches its plan: it probes the finished STEP for the pocket walls,
-the seat, the lead-ins, the notches and every hole. It cannot check that your holes match your deck,
-so measure before you cut.
+the seat, the lead-ins, the notches and every hole. These are software checks, not part tests. They
+cannot show that your holes match your deck, so measure before you cut.
+
+The printed plate came from the build scripts that came before this one. For blank and cap head
+plates, the script's output matches those files at all 2,500 random probe points we compared.
 
 The most useful contribution is a [fit report](.github/ISSUE_TEMPLATE/fit-report.yml) from a plate you
 made. See [CONTRIBUTING.md](CONTRIBUTING.md).

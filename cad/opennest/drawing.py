@@ -218,6 +218,7 @@ def write_drawing(plan: Plan, path: Path) -> None:
     }.get(material.process, "")
     coated = "Dimensions apply after coating. " if material.process == "cnc-aluminium" else ""
     notes = [finish, f"{coated}Tab walls meet the seat in a", "sharp corner: use a square end mill. External edges R0.5.", f"Plate corners R{s.R_CORNER:g}. Notch R{s.R_NOTCH:g} inside, R{s.R_MOUTH:g} at the mouth.", f"Engraving {s.ENGRAVE_DEPTH} mm deep. The STEP file is the master."]
+    notes.append("Status: this version has not been machined yet. Calculated, not proven.")
     if material.process == "cnc-ptfe" and req.holes:
         notes.append("Fit a stainless sleeve, 5 x 3.2 x 2.0 mm, in each hole.")
     y -= 15

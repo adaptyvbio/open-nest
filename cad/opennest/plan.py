@@ -237,6 +237,7 @@ def make_plan(req: Request) -> Plan:
     if not req.name or any(c in req.name for c in "/\\ ") or req.name.startswith("."):
         plan.errors.append(f"--name {req.name!r} must be a plain folder name, with no spaces or slashes.")
     plan.pocket_x, plan.pocket_y = s.pocket_for(plan.material)
+    plan.warnings.append(s.test_status(plan.material))
     _plan_screws(plan)
     if plan.errors:
         return plan
@@ -267,6 +268,7 @@ def summary(plan: Plan) -> dict:
         "errors": plan.errors,
         "warnings": plan.warnings,
         "material": plan.material.title if plan.material else req.material,
+        "test_status": s.test_status(plan.material) if plan.material else None,
         "process": plan.material.process if plan.material else None,
         "pocket_mm": [plan.pocket_x, plan.pocket_y],
         "catch_per_side_mm": [round(v, 2) for v in s.capture_per_side(plan.pocket_x, plan.pocket_y)],

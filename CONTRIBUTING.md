@@ -4,6 +4,10 @@ The most useful thing you can send is a measurement. Make a plate, measure it, t
 plates and a real robot, then open a [fit report](.github/ISSUE_TEMPLATE/fit-report.yml). A failed
 fit helps as much as a good one.
 
+When a real part is made in a new material or runs on a robot, update the test status in three
+places: `TESTED_MATERIALS` in `cad/opennest/spec.py`, the table at the top of `README.md`, and page 2
+of the guide. Say only what was really done.
+
 ## Changing the design
 
 Fixed dimensions live in `cad/opennest/spec.py`. A change there changes every plate, so say what

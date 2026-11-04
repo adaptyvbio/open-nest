@@ -4,9 +4,11 @@
  "ok": true,
  "errors": [],
  "warnings": [
+  "Tested: v1.4 has been printed on a Bambu H2D in PLA. It has not been run on a robot, and no measurements are recorded yet.",
   "Print shrink closes the pocket. Measure it (X 128.1 to 128.5, Y 85.8 to 86.2) and rebuild with --xy-scale target/measured if it is off."
  ],
  "material": "PLA",
+ "test_status": "Tested: v1.4 has been printed on a Bambu H2D in PLA. It has not been run on a robot, and no measurements are recorded yet.",
  "process": "3d-print",
  "pocket_mm": [
   128.3,
@@ -117,6 +119,7 @@
  ],
  "volume_cm3": 62.92,
  "not_checked": [
+  "This exact part: the checks read the file, not a real plate.",
   "Whether the holes match your deck: measure it before you cut.",
   "Fit on real plates and on a robot."
  ],

@@ -4,9 +4,11 @@
  "ok": true,
  "errors": [],
  "warnings": [
+  "Not tested: no v1.4 plate has been made in POM-C. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
   "Polymers creep under screw heads. Keep torque low and recheck it after a day."
  ],
  "material": "POM-C",
+ "test_status": "Not tested: no v1.4 plate has been made in POM-C. The only test so far is a v1.4 plate printed in PLA on a Bambu H2D.",
  "process": "cnc-polymer",
  "pocket_mm": [
   128.4,
@@ -117,6 +119,7 @@
  ],
  "volume_cm3": 62.86,
  "not_checked": [
+  "This exact part: the checks read the file, not a real plate.",
   "Whether the holes match your deck: measure it before you cut.",
   "Fit on real plates and on a robot."
  ],

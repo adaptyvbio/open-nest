@@ -125,6 +125,20 @@ def test_design_record_round_trips(tmp_path):
     assert back == req and version == s.VERSION
 
 
+def test_every_material_says_how_far_it_is_tested():
+    assert "Tested: v1.4 has been printed on a Bambu H2D in PLA" in plan(material="pla", blank=True).warnings[0]
+    for key in s.MATERIALS:
+        if key != "pla":
+            assert plan(material=key, blank=True).warnings[0].startswith("Not tested: no v1.4 plate")
+
+
+def test_only_pla_is_marked_as_tested():
+    assert set(s.TESTED_MATERIALS) == {"pla"}
+    assert version_reference()["pocket_by_material"]["pla"]["tested"] is True
+    assert version_reference()["pocket_by_material"]["6082"]["tested"] is False
+    assert "Not tested" in design_record(plan(blank=True))["status"]["this_material"]
+
+
 def test_design_record_holds_the_dimensions(tmp_path):
     p = cap(parse_spacing("110x60"), label="Slot A3")
     record = design_record(p)
