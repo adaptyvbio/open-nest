@@ -1,7 +1,7 @@
 OpenNest is licensed in parts. Full texts are in LICENSES/ and design/fonts/.
 
 Hardware design: CERN-OHL-P-2.0
-  cad/, models/ and everything cad/nest.py generates.
+  cad/, models/ and everything the opennest command generates.
 
 Documentation and figures: CC-BY-4.0
   docs/, design/opennest.pen, design/logo/ glyph artwork, *.md.

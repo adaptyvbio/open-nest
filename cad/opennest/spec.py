@@ -10,10 +10,31 @@ from dataclasses import dataclass
 from pathlib import Path
 
 VERSION = "1.4"
-REPO = Path(__file__).resolve().parents[2]
-LOGO_SVG = REPO / "design/brand/adaptyv-mark.svg"
-FONT = REPO / "cad/assets/LiberationSans-Bold.ttf"  # the engraving font; Geist outlines overlap themselves and cannot be cut cleanly
-BAMBU_TEMPLATE = REPO / "cad/assets/bambu-h2d-template.3mf"
+REPO_URL = "https://github.com/adaptyvbio/open-nest"
+REPO = Path(__file__).resolve().parents[2]  # the clone, when running from one
+
+# Files the build reads, by their path in the repo. pyproject.toml packs each one into the wheel as
+# opennest/assets/<file name>, which is where uvx and pip find them.
+ASSETS = (
+    "design/brand/adaptyv-mark.svg",
+    "cad/assets/LiberationSans-Bold.ttf",
+    "cad/assets/bambu-h2d-template.3mf",
+    "design/fonts/Geist-400.ttf",
+    "design/fonts/Geist-500.ttf",
+    "design/fonts/GeistMono-400.ttf",
+    "design/fonts/GeistMono-500.ttf",
+)
+
+
+def asset(path: str) -> Path:
+    assert path in ASSETS, f"add {path} to ASSETS and to the wheel in pyproject.toml"
+    packed = Path(__file__).resolve().parent / "assets" / Path(path).name
+    return packed if packed.is_file() else REPO / path
+
+
+LOGO_SVG = asset("design/brand/adaptyv-mark.svg")
+FONT = asset("cad/assets/LiberationSans-Bold.ttf")  # the engraving font; Geist outlines overlap themselves and cannot be cut cleanly
+BAMBU_TEMPLATE = asset("cad/assets/bambu-h2d-template.3mf")
 
 # ---- envelope and heights
 L, W = 134.0, 94.0

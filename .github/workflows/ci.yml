@@ -21,8 +21,24 @@ jobs:
       - name: Build real parts and read them back
         run: uv run pytest -m slow
 
+  uvx:
+    runs-on: blacksmith-4vcpu-ubuntu-2404
+    steps:
+      - uses: useblacksmith/checkout@v1
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install OpenCascade's system libraries
+        run: sudo apt-get update && sudo apt-get install -y libgl1 libglu1-mesa libxrender1 libxext6
+      - name: Build a print and a CNC plate with uvx, outside the checkout
+        working-directory: ${{ runner.temp }}
+        run: |
+          uvx --from "$GITHUB_WORKSPACE" opennest make --material pla --blank --name pla
+          uvx --from "$GITHUB_WORKSPACE" opennest make --material 6082 --screw M3 --head cap --spacing 110x60 --name cnc
+          ls out/pla/nest.3mf out/cnc/drawing.pdf
+
   release:
-    needs: test
+    needs: [test, uvx]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:

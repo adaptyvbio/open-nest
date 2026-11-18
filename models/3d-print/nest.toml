@@ -1,12 +1,12 @@
 # OpenNest design record, v1.4. All dimensions in mm.
-# To build this part again: uv run cad/nest.py make --config nest.toml
+# To build this part again: uvx --from git+https://github.com/adaptyvbio/open-nest opennest make --config nest.toml
 
 [design]
 opennest_version = "1.4"
 name = "blank-3d-print"
 label = "Blank"
 built = "2026-11-04"
-command = "uv run cad/nest.py make --material pla --name blank-3d-print --blank"
+command = "opennest make --material pla --name blank-3d-print --blank"
 origin = "plate centre, Z 0 at the underside"
 units = "mm"
 

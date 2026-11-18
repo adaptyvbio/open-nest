@@ -2,7 +2,18 @@
 
 OpenNest is an open hardware deck plate that holds a SLAS microplate. The pocket, tabs and notches
 are fixed. The user chooses the holes, the screws and the material. Your job is to turn their
-request into files with `cad/nest.py`.
+request into files with the `opennest` command.
+
+## Run it
+
+It needs only [uv](https://docs.astral.sh/uv/). There is nothing to clone or install:
+
+```sh
+uvx --from git+https://github.com/adaptyvbio/open-nest opennest check --blank --material pla
+```
+
+In a clone of this repo, `uv run opennest` runs the working copy instead. Below, `opennest` means
+whichever of the two you use. The first uvx run downloads the CAD kernel, so it is the slowest.
 
 ## Build a plate
 
@@ -12,8 +23,8 @@ request into files with `cad/nest.py`.
 4. Read `out/<name>/report.json`. Pass on every warning, and the `not_checked` list, to the user.
 
 ```sh
-uv run cad/nest.py check --material 6082 --screw M3 --head cap --spacing 110x60
-uv run cad/nest.py make  --material 6082 --screw M3 --head cap --spacing 110x60 --name deck-a --label "Slot A3"
+opennest check --material 6082 --screw M3 --head cap --spacing 110x60
+opennest make  --material 6082 --screw M3 --head cap --spacing 110x60 --name deck-a --label "Slot A3"
 ```
 
 Add `--json` for machine-readable output. Exit codes: 0 ok, 2 the request cannot be built and the
@@ -25,8 +36,8 @@ errors say why, 3 a built part failed its checks.
 | --- | --- | --- |
 | Holes | `--holes "x,y x,y"` or `--spacing 110x60` | mm from the plate centre. `--spacing` is a centred rectangle, or two holes on the X axis with one number |
 | Screws | `--screw M3 --head cap` or `--head flat` | `--head plain --hole-d 4.2` makes a plain through hole, for example to tap |
-| Material | `--material` | Sets the process and sizes the pocket. List them with `uv run cad/nest.py materials` |
-| Name | `--name deck-a` | Output folder under `out/` |
+| Material | `--material` | Sets the process and sizes the pocket. List them with `opennest materials` |
+| Name | `--name deck-a` | Output folder, `out/<name>` in the current folder. `--out` sets any other |
 | Deck | `--deck 8` | Optional. Deck thickness in mm, underside to seat, 2 to 30, default 5. Tabs stay 6 mm above the seat |
 
 No holes at all: `--blank`.
@@ -48,10 +59,12 @@ clearance diameter from ISO 273 and say what you chose.
 
 `nest.toml` is the design record: the version, the commit, the inputs and every dimension. Tell the
 user to keep it with the part. To find a dimension later, read that file. To build the same part
-again, run `uv run cad/nest.py make --config path/to/nest.toml`.
+again, run `opennest make --config path/to/nest.toml`. The record's header gives the full uvx
+command, pinned to the commit that built it. Older records say `uv run cad/nest.py`, which still
+works in a clone and is the same command.
 
 If only the plate survives, its engraved version leads to `docs/versions/v<version>.toml`, which
-holds every fixed dimension of that version. `uv run cad/nest.py spec` prints the current one.
+holds every fixed dimension of that version. `opennest spec` prints the current one.
 
 For `--material pla`, `nest.3mf` is a Bambu Studio project for the H2D with tuned settings. Other
 print materials get a plain 3MF, so the user sets up their own slicer profile.
@@ -83,6 +96,8 @@ been printed.
 ## Working on the repo
 
 `uv run pytest -m "not slow"` runs the fast checks, and `uv run pytest` builds real parts as well.
+The command lives in `cad/opennest/cli.py`. A file the build reads must be in `ASSETS` in `spec.py`
+and in the wheel in `pyproject.toml`, or uvx cannot find it: the fast tests check that the two agree.
 `uv run cad/release.py` rebuilds the reference plates in `models/`. A new `VERSION` that reaches
 `main` publishes a GitHub release: see `CONTRIBUTING.md`. Fixed dimensions live only in
 `cad/opennest/spec.py`. The figures and guide come from `design/opennest.pen`; see `design/README.md`.

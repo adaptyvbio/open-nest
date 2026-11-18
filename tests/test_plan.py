@@ -2,7 +2,7 @@
 """Fast checks on the rules a hole pattern must pass. No CAD."""
 import pytest
 
-from nest import parse_holes, parse_spacing
+from opennest.cli import parse_holes, parse_spacing
 from opennest import spec as s
 from opennest.plan import Request, make_plan
 from opennest.record import command_for, design_record, read_request, to_toml, version_reference, write_record
@@ -189,6 +189,17 @@ def test_design_record_holds_the_dimensions(tmp_path):
     assert '--label "Slot A3"' in command_for(p.request)
 
 
+def test_the_record_says_how_to_build_it_again_with_no_clone(tmp_path, monkeypatch):
+    from opennest import record
+
+    path = tmp_path / "nest.toml"
+    monkeypatch.setattr(record, "_git_commit", lambda: "abc1234")
+    write_record(plan(blank=True), path)
+    assert f"uvx --from git+{s.REPO_URL}@abc1234 opennest make --config nest.toml" in path.read_text()
+    assert record.run_command("abc1234-modified") == record.run_command(None) == f"uvx --from git+{s.REPO_URL} opennest"
+    assert command_for(plan(blank=True).request).startswith("opennest make ")
+
+
 def test_version_reference_is_committed():
     path = s.REPO / "docs" / "versions" / f"v{s.VERSION}.toml"
     assert path.read_text() == to_toml(version_reference(), f"OpenNest v{s.VERSION}. All dimensions in mm.")
@@ -256,17 +267,24 @@ def test_unknown_material_is_an_error():
     ],
 )
 def test_bad_requests_exit_2_with_a_message(args, capsys, monkeypatch):
-    import nest
+    from opennest import cli
 
-    monkeypatch.setattr("sys.argv", ["nest.py", *args])
+    monkeypatch.setattr("sys.argv", ["opennest", *args])
     with pytest.raises(SystemExit) as stop:
-        raise SystemExit(nest.main())
+        raise SystemExit(cli.main())
     assert stop.value.code == 2
     assert "ERROR" in capsys.readouterr().out
 
 
 def test_a_good_check_exits_0(monkeypatch):
-    import nest
+    from opennest import cli
 
-    monkeypatch.setattr("sys.argv", ["nest.py", "check", "--material", "6082", "--screw", "M3", "--head", "cap", "--spacing", "110x60"])
-    assert nest.main() == 0
+    monkeypatch.setattr("sys.argv", ["opennest", "check", "--material", "6082", "--screw", "M3", "--head", "cap", "--spacing", "110x60"])
+    assert cli.main() == 0
+
+
+def test_the_old_script_still_runs_the_command():
+    import nest
+    from opennest import cli
+
+    assert nest.main is cli.main

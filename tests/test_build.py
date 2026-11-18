@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from nest import make, parse_spacing
+from opennest.cli import make, parse_spacing
 from opennest.plan import Request, make_plan
 
 pytestmark = pytest.mark.slow
