@@ -2,6 +2,13 @@
 
 The version is engraved on every plate, so a plate always says which design it is.
 
+## Unreleased
+
+- The script is now the `opennest` command, and it runs with uvx with no clone:
+  `uvx --from git+https://github.com/adaptyvbio/open-nest opennest`. `make` writes to `out/<name>`
+  in the current folder, and a design record's header gives the uvx command that builds it again,
+  pinned to its commit. `uv run cad/nest.py` still works in a clone. The geometry is unchanged.
+
 ## v1.4
 
 - Printed in PLA on a Bambu H2D. This is the only real test of this version so far.

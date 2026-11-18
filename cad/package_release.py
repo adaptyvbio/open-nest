@@ -114,7 +114,7 @@ def notes() -> str:
         "",
         "## Reference plates",
         "",
-        f"These plates have no holes. To build one with your holes and deck thickness, open [the repo]({repo}/tree/{tag}) in your coding agent, or run `cad/nest.py` yourself.",
+        f"These plates have no holes. To build one with your holes and deck thickness, open [the repo]({repo}/tree/{tag}) in your coding agent, or run `uvx --from git+{repo}@{tag} opennest` yourself.",
         "",
         "| File | Material | Contains | Status |",
         "| --- | --- | --- | --- |",

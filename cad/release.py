@@ -6,7 +6,7 @@
 import json
 import sys
 
-from nest import make
+from opennest.cli import make
 from opennest import spec as s
 from opennest.plan import Request, make_plan
 from opennest.record import to_toml, version_reference

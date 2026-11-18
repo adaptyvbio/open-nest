@@ -297,7 +297,7 @@ wheels = [
 [[package]]
 name = "opennest"
 version = "1.4.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "cadquery" },
     { name = "fonttools" },

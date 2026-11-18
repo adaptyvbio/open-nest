@@ -4,6 +4,7 @@ import json
 import subprocess
 import tomllib
 from datetime import date
+from importlib import metadata
 from pathlib import Path
 
 from . import spec as s
@@ -11,6 +12,9 @@ from .plan import Plan, Request
 
 
 def _git_commit() -> str | None:
+    """The commit this code came from: from git in a clone, or from the install record after uvx or pip installs from git."""
+    if Path(__file__).resolve().parent != s.REPO / "cad" / "opennest":
+        return _installed_commit()
     try:
         commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=s.REPO, capture_output=True, text=True, check=True).stdout.strip()
         dirty = subprocess.run(["git", "status", "--porcelain", "--", "cad"], cwd=s.REPO, capture_output=True, text=True, check=True).stdout.strip()
@@ -19,8 +23,23 @@ def _git_commit() -> str | None:
     return f"{commit}-modified" if dirty else commit
 
 
+def _installed_commit() -> str | None:
+    try:
+        direct_url = json.loads(metadata.distribution("opennest").read_text("direct_url.json") or "{}")
+    except (metadata.PackageNotFoundError, ValueError):
+        return None
+    commit = direct_url.get("vcs_info", {}).get("commit_id")
+    return commit[:7] if commit else None
+
+
+def run_command(commit: str | None = None) -> str:
+    """How to run this tool with no clone, pinned to a commit when there is one to pin to."""
+    pin = f"@{commit}" if commit and not commit.endswith("-modified") else ""
+    return f"uvx --from git+{s.REPO_URL}{pin} opennest"
+
+
 def command_for(req: Request) -> str:
-    parts = ["uv run cad/nest.py make", f"--material {req.material}", f"--name {req.name}"]
+    parts = ["opennest make", f"--material {req.material}", f"--name {req.name}"]
     if req.blank:
         parts.append("--blank")
     if req.holes:
@@ -185,8 +204,9 @@ def to_toml(data: dict, header: str = "") -> str:
 
 
 def write_record(plan: Plan, path: Path) -> None:
-    header = f"OpenNest design record, v{s.VERSION}. All dimensions in mm.\nTo build this part again: uv run cad/nest.py make --config {path.name}"
-    path.write_text(to_toml(design_record(plan), header))
+    record = design_record(plan)
+    header = f"OpenNest design record, v{s.VERSION}. All dimensions in mm.\nTo build this part again: {run_command(record['design'].get('commit'))} make --config {path.name}"
+    path.write_text(to_toml(record, header))
 
 
 def read_request(path: Path) -> tuple[Request, str, str | None]:

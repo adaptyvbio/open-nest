@@ -4,7 +4,7 @@ The licenses in this repository cover the design, not the Adaptyv name or logo. 
 Adaptyv.
 
 You may make, use and sell plates from this design under its license. You may keep the engraving
-on a plate built from the unmodified reference geometry, with `cad/nest.py` and your own holes.
+on a plate built from the unmodified reference geometry, with the `opennest` command and your own holes.
 
 If you change the pocket, tabs, notches or seat, build with `--no-branding`, so that the part does
 not carry a name that vouches for a design it no longer matches. Do not use the Adaptyv name or

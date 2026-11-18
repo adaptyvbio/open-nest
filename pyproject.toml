@@ -4,7 +4,8 @@ version = "1.4.0"
 description = "Open hardware SLAS microplate nest for lab automation"
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
-license = { text = "CERN-OHL-P-2.0 AND MIT AND CC-BY-4.0" }
+license = "CERN-OHL-P-2.0 AND MIT AND CC-BY-4.0 AND OFL-1.1"
+license-files = ["LICENSE", "LICENSES/*", "TRADEMARKS.md", "cad/assets/OFL-Liberation.txt", "design/fonts/OFL-Geist.txt"]
 dependencies = [
     "cadquery==2.5.2",
     "svgpathtools==1.7.1",
@@ -16,11 +17,34 @@ dependencies = [
     "reportlab>=4",
 ]
 
+[project.scripts]
+opennest = "opennest.cli:main"
+
+[project.urls]
+Repository = "https://github.com/adaptyvbio/open-nest"
+
 [dependency-groups]
 dev = ["pytest>=8", "pypdf>=5"]
 
-[tool.uv]
-package = false
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cad/opennest"]
+
+# The files in ASSETS in cad/opennest/spec.py. A clone reads them where they are.
+[tool.hatch.build.targets.wheel.force-include]
+"design/brand/adaptyv-mark.svg" = "opennest/assets/adaptyv-mark.svg"
+"cad/assets/LiberationSans-Bold.ttf" = "opennest/assets/LiberationSans-Bold.ttf"
+"cad/assets/bambu-h2d-template.3mf" = "opennest/assets/bambu-h2d-template.3mf"
+"design/fonts/Geist-400.ttf" = "opennest/assets/Geist-400.ttf"
+"design/fonts/Geist-500.ttf" = "opennest/assets/Geist-500.ttf"
+"design/fonts/GeistMono-400.ttf" = "opennest/assets/GeistMono-400.ttf"
+"design/fonts/GeistMono-500.ttf" = "opennest/assets/GeistMono-500.ttf"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["cad/opennest", "cad/assets", "design/brand/adaptyv-mark.svg", "design/fonts", "LICENSE", "LICENSES", "TRADEMARKS.md", "README.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

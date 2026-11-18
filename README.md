@@ -28,17 +28,19 @@ Open this repo in your coding agent and describe what you need:
 > Make me an OpenNest with four M3 cap head screws, 110 x 60 mm apart. I'm milling it in aluminium.
 
 The agent reads [AGENTS.md](AGENTS.md), runs the script and checks the result. You can run it yourself
-too, with [uv](https://docs.astral.sh/uv/) installed:
+too. With [uv](https://docs.astral.sh/uv/) installed, you need no clone:
 
 ```sh
-uv run cad/nest.py check --material 6082 --screw M3 --head cap --spacing 110x60
-uv run cad/nest.py make  --material 6082 --screw M3 --head cap --spacing 110x60 --name deck-a --label "Slot A3"
+uvx --from git+https://github.com/adaptyvbio/open-nest opennest check --material 6082 --screw M3 --head cap --spacing 110x60
+uvx --from git+https://github.com/adaptyvbio/open-nest opennest make  --material 6082 --screw M3 --head cap --spacing 110x60 --name deck-a --label "Slot A3"
 ```
 
+In a clone, `uv run opennest` does the same with your working copy.
+
 `check` needs no CAD and explains anything that will not work, including the deck thickness a screw
-head needs. `make` takes about 20 s and writes to
-`out/deck-a/`. `--label` is free text engraved under the title and version: a slot name, or anything
-you want to read on the part.
+head needs. `make` takes about 20 s and writes to `out/deck-a/` in the current folder. `--label` is
+free text engraved under the title and version: a slot name, or anything you want to read on the
+part.
 
 | File | What it is |
 | --- | --- |
@@ -54,10 +56,10 @@ you want to read on the part.
 ### Find the dimensions later
 
 Keep `nest.toml` with the part. It holds everything needed to read a dimension or build the same part
-again:
+again, and its header gives the command, pinned to the commit that built it:
 
 ```sh
-uv run cad/nest.py make --config out/deck-a/nest.toml
+uvx --from git+https://github.com/adaptyvbio/open-nest opennest make --config out/deck-a/nest.toml
 ```
 
 If only the plate survives, read the version engraved on it and open
@@ -106,7 +108,7 @@ Reference plates with no holes are in [`models/`](models/). Each folder has a `r
 
 ## What the script checks
 
-`cad/nest.py` checks that a file matches its plan: it probes the finished STEP for the pocket walls,
+`opennest` checks that a file matches its plan: it probes the finished STEP for the pocket walls,
 the seat, the lead-ins, the notches and every hole. These are software checks, not part tests. They
 cannot show that your holes match your deck, so measure before you cut.
 

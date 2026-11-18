@@ -25,7 +25,7 @@ LEAD = HexColor("#A6DEFB")
 
 def _fonts() -> None:
     for name, file in (("Geist", "Geist-400.ttf"), ("GeistM", "Geist-500.ttf"), ("Mono", "GeistMono-400.ttf"), ("MonoM", "GeistMono-500.ttf")):
-        pdfmetrics.registerFont(TTFont(name, str(s.REPO / "design/fonts" / file)))
+        pdfmetrics.registerFont(TTFont(name, str(s.asset(f"design/fonts/{file}"))))
     pdfmetrics.registerFont(TTFont("Engrave", str(s.FONT)))
 
 
